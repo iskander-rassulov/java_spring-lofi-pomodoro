@@ -8,13 +8,7 @@ public class func_playlist_default {
         data_playlist defaultPlaylist = new data_playlist(3);
 
         defaultPlaylist.audios.add(funcCreateAudio.createAudio
-                (0, 50, "URL1", "Default1", "name surname", false));
-
-        defaultPlaylist.audios.add(funcCreateAudio.createAudio
-                (1, 50, "URL2", "Default2", "name surname", false));
-
-        defaultPlaylist.audios.add(funcCreateAudio.createAudio
-                (2, 50, "URL3", "Default3", "name surname", false));
+                (0, 50, "audio/memoria.mp3", "Memoria", "name surname", false));
 
         return defaultPlaylist;
     }

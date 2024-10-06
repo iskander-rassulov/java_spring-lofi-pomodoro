@@ -11,9 +11,7 @@ public class LofipomodoroApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(LofipomodoroApplication.class, args);
-		funcStartPlaylist.startDefaultPlaylist();
-		funcStartPlaylist.startMevievalPlaylist();
-		funcStartPlaylist.startHalloweenPlaylist();
+
 	}
 
 }
