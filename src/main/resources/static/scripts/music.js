@@ -57,10 +57,8 @@ function playHalloweenPalylist(trackIndex) {
     audioPlayer.play();
 }
 
-
 // Автоматическое воспроизведение следующего трека по завершению
 audioPlayer.addEventListener('ended', function() {
     currentTrack = (currentTrack + 1) % playlist.length;  // Цикл по плейлисту
     playAudio(currentTrack);
 });
-
