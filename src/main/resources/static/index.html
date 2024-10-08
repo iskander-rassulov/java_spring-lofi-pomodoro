@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title id="tab_title">Pomodoro</title>
+    <title id="tab_title">Lofi Pomodoro</title>
     <link id="dynamic-favicon" rel="icon" type="image/ico"
           href="images/red_tomato.ico">
     <!-- Original favicon courtesy of http://icons8.com -->
@@ -14,10 +14,10 @@
     <link rel="stylesheet" href="pomodoro.css">
 </head>
 <body>
-<div class="container">
+<div class="main_container">
     <header>
         <div id="titlebox">
-            <div id="title">Pomodoro</div>
+            <div id="title">Lofi Pomodoro</div>
             <div id="subtitle">A simple workflow tool</div>
         </div>
     </header>
@@ -29,13 +29,8 @@
         <button id="btn_reset" class="btn_default">reset</button>
         </p>
         <p>
-            <button id="btn_pomodoro" class="btn_default">pomodoro (25m)</button>
-            <button id="btn_shortbreak" class="btn_default">short break (5m)</button>
-            <button id="btn_longbreak" class="btn_default">long break (15m)</button>
-        </p>
-        <p>
             <button id="btn_custom" class="btn_default">
-                <label for="ipt_custom">custom:</label>
+                <label for="ipt_custom">custom</label>
             </button>
             <input type="number" id="ipt_custom" value="45" min="0" max="100000000">
             <select id="custom_units">
@@ -44,6 +39,12 @@
                 <option value="hours">hours</option>
             </select>
         </p>
+        <p>
+            <button id="btn_pomodoro" class="btn_default">pomodoro (25m)</button>
+            <button id="btn_shortbreak" class="btn_default">short break (5m)</button>
+            <button id="btn_longbreak" class="btn_default">long break (15m)</button>
+        </p>
+
     </div>
     <footer>
         <div class="footerbox">
@@ -72,7 +73,7 @@
                     <option value="alarm_boops">Boops</option>
                 </select>
                 <br><br>
-                <label for="alarm_volume" id="lbl_volume">Volume:</label><br>
+                <label for="alarm_volume" id="lbl_volume">Alarm Volume:</label><br>
                 <input type="range" id="alarm_volume" min=0 max=100 value=50>
             </div>
             <br>
@@ -84,6 +85,14 @@
         </div>
     </footer>
 </div>
+
+<div class="side-container">
+    <header>
+        <h1>To-do list</h1>
+    </header>
+    <p>This is an additional container.</p>
+</div>
+
 <audio id="alarm_chime">
     <source src="audio/one_chime.mp3" type="audio/mpeg"></audio>
 <audio id="alarm_bell">

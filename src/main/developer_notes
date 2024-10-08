@@ -14,3 +14,8 @@ Bootstrap
   </body>
 </html>
 ----------------------------------------------------
+background-color: #EEE;
+display: inline-block;
+
+background-color: #669bbc;
+border: 1px solid #023047;
