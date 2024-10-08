@@ -44,6 +44,7 @@ footer {
 	height: 500px;
 }
 #timer {
+	font-family: 'Comfortaa', sans-serif;
     font-size: 12em;
     font-weight: bold;
 	color: white;
@@ -51,7 +52,7 @@ footer {
 }
 
 #titlebox{
-	font-family: 'Roboto';
+	font-family: 'Comfortaa', sans-serif;
 }
 
 button.btn_default {
@@ -64,8 +65,9 @@ button.btn_default {
 }
 
 #btn_pomodoro{
+	font-family: 'Comfortaa', sans-serif;
 	margin-right:10px;
-	font-size: 18px;
+	font-size: 14px;
 	background-color: #2d2d2d33;
 	border: 3px solid white;
 	color: #ffffff;
@@ -74,8 +76,9 @@ button.btn_default {
 }
 
 #btn_shortbreak{
+	font-family: 'Comfortaa', sans-serif;
 	margin-right:10px;
-	font-size: 18px;
+	font-size: 14px;
 	background-color: #2d2d2d33;
 	border: 3px solid white;
 	color: #ffffff;
@@ -84,7 +87,8 @@ button.btn_default {
 }
 
 #btn_longbreak{
-	font-size: 18px;
+	font-family: 'Comfortaa', sans-serif;
+	font-size: 14px;
 	background-color: #2d2d2d33;
 	border: 3px solid white;
 	color: #ffffff;
@@ -98,8 +102,9 @@ button.btn_default {
 	color: white;
 }
 #btn_start {
+	font-family: 'Comfortaa', sans-serif;
 	margin-top: 150px;
-	font-size: 36px;
+	font-size: 32px;
     background-color: #2d2d2d33;
 	border: 3px solid white;
 	color: #ffffff;
@@ -108,8 +113,9 @@ button.btn_default {
 
 }
 #btn_pause {
+	font-family: 'Comfortaa', sans-serif;
 	margin-top: 150px;
-	font-size: 36px;
+	font-size: 32px;
 	background-color: #2d2d2d33;
 	border: 3px solid white;
 	color: #ffffff;
@@ -245,6 +251,7 @@ div.footerbox ol {
 	border-radius: 10px;
 	transition: transform 0.3s ease-in-out;
 	border: 2px solid #ababab;
+	font-family: 'Comfortaa', sans-serif;
 }
 
 .button img {
@@ -274,8 +281,12 @@ div.footerbox ol {
 	transform: scale(1.1); /* Увеличение на 10% */
 }
 
-#buttonHalloween{
-
+.active {
+	background-color: #386641 !important; /* Зеленый фон для активной кнопки */
+	color: #ffffff !important; /* Белый текст */
+	border-color: #ffffff !important; /* Зеленая граница */
+	text-shadow: 8px 8px 16px rgba(0, 0, 0, 0.8); /* Меньшая тень */
 }
+
 
 

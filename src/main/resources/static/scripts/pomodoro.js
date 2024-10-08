@@ -107,109 +107,96 @@ window.onload = function () {
     var timerDisplay = document.getElementById('timer'),
     customTimeInput = document.getElementById('ipt_custom'),
     timer = new CountdownTimer(),
-    timeObj = parseSeconds(25*60);
+    timeObj = parseSeconds(25 * 60);
 
-    /** Set the time on the main clock display and
-        set the time remaining section in the title. */
     function setTimeOnAllDisplays(minutes, seconds) {
-        var clockHours = '', clockMinutes = '', clockSeconds = ''; // Объявляем переменные
-        if (minutes >= 60) {
-            // Add an hours section to all displays
-            var hours = Math.floor(minutes / 60);
-            minutes = minutes % 60;
-            clockHours = hours + ':';
-            document.title = '(' + hours + 'h' + minutes + 'm) Pomodoro';
-        } else {
-            clockHours = '';
-            document.title = '(' + minutes + 'm) Pomodoro';
-        }
-
-        clockMinutes = minutes < 10 ? '0' + minutes : minutes;
-        clockMinutes += ':';
-        clockSeconds = seconds < 10 ? '0' + seconds : seconds;
-
-        timerDisplay.textContent = clockHours + clockMinutes + clockSeconds;
+        var clockMinutes = minutes < 10 ? '0' + minutes : minutes;
+        var clockSeconds = seconds < 10 ? '0' + seconds : seconds;
+        timerDisplay.textContent = clockMinutes + ':' + clockSeconds;
+        document.title = '(' + minutes + 'm) Pomodoro';
     }
 
-    /** Обновленная функция для сброса таймера */
     function resetMainTimer(seconds) {
-        changeFavicon('red');  // Изменение иконки
-        timer.pause();  // Останавливаем текущий таймер, если он работает
-        timer = new CountdownTimer(seconds);  // Инициализируем новый таймер
-        timer.onTick(setTimeOnAllDisplays);  // Обновляем отображение времени при каждом тике
-        setTimeOnAllDisplays(Math.floor(seconds / 60), seconds % 60);  // Сразу обновляем отображение
+        console.log(`resetMainTimer called with ${seconds} seconds`);
+        changeFavicon('red');
+        timer.pause();
+        timer = new CountdownTimer(seconds);
+        timer.onTick(setTimeOnAllDisplays);
+        setTimeOnAllDisplays(Math.floor(seconds / 60), seconds % 60);
+        console.log(`Timer reset to ${seconds} seconds`);
     }
 
-    // Set default page timer displays
-    setTimeOnAllDisplays(timeObj.minutes, timeObj.seconds);
+    function setActiveButton(buttonId) {
+        console.log('Switching active button to: ', buttonId);
+        // Удаляем класс active у всех кнопок
+        document.getElementById('btn_pomodoro').classList.remove('active');
+        document.getElementById('btn_shortbreak').classList.remove('active');
+        document.getElementById('btn_longbreak').classList.remove('active');
 
+        // Добавляем класс active к выбранной кнопке
+        document.getElementById(buttonId).classList.add('active');
+        console.log('Active button set: ', document.getElementById(buttonId).classList);
+    }
+
+
+    setTimeOnAllDisplays(timeObj.minutes, timeObj.seconds);
     timer.onTick(setTimeOnAllDisplays);
 
-    // Add listeners for start, pause, etc. buttons
-    document.getElementById('btn_start').addEventListener(
-        'click', function () {
-            timer.start();
-        });
+    // Обработчики для кнопок
+    document.getElementById('btn_start').addEventListener('click', function () {
+        document.getElementById('btn_start').style.display = 'none';
+        document.getElementById('btn_pause').style.display = 'inline';
+        timer.start();
+    });
 
-    document.getElementById('btn_pause').addEventListener(
-        'click', function () {
-            timer.pause();
-        });
+    document.getElementById('btn_pause').addEventListener('click', function () {
+        document.getElementById('btn_pause').style.display = 'none';
+        document.getElementById('btn_start').style.display = 'inline';
+        timer.pause();
+    });
 
-    document.getElementById('btn_reset').addEventListener(
-        'click', function () {
-            resetMainTimer(timer.seconds);
-            timer.start();
-        });
+    document.getElementById('btn_pomodoro').addEventListener('click', function () {
+        console.log("Pomodoro button clicked");
+        resetMainTimer(25 * 60);
+        setActiveButton('btn_pomodoro');
+        document.getElementById('btn_pause').style.display = 'none';  // Скрываем кнопку PAUSE
+        document.getElementById('btn_start').style.display = 'inline';
+    });
 
-    document.getElementById('btn_pomodoro').addEventListener(
-        'click', function () {
-            resetMainTimer(25*60);
-            timer.start();
-        });
+    document.getElementById('btn_shortbreak').addEventListener('click', function () {
+        console.log("Short break button clicked");
+        resetMainTimer(5 * 60);
+        setActiveButton('btn_shortbreak');
+        document.getElementById('btn_pause').style.display = 'none';  // Скрываем кнопку PAUSE
+        document.getElementById('btn_start').style.display = 'inline';
+    });
 
-    document.getElementById('btn_shortbreak').addEventListener(
-        'click', function () {
-            resetMainTimer(5*60);
-            timer.start();
-        });
+    document.getElementById('btn_longbreak').addEventListener('click', function () {
+        console.log("Long break button clicked");
+        resetMainTimer(15 * 60);
+        setActiveButton('btn_longbreak');
+        document.getElementById('btn_pause').style.display = 'none';  // Скрываем кнопку PAUSE
+        document.getElementById('btn_start').style.display = 'inline';
+    });
 
-    document.getElementById('btn_longbreak').addEventListener(
-        'click', function () {
-            resetMainTimer(15*60);
-            timer.start();
-        });
+    document.getElementById('btn_reset').addEventListener('click', function () {
+        resetMainTimer(timer.seconds);
+        timer.start();
+    });
 
-    document.getElementById('btn_custom').addEventListener(
-        'click', function () {
-            var customUnits = document.getElementById('custom_units').value;
-            if (customUnits === 'minutes') {
-                resetMainTimer(customTimeInput.value * 60);
-            } else if (customUnits === 'hours') {
-                resetMainTimer(customTimeInput.value * 3600);
-            } else {
-                resetMainTimer(customTimeInput.value);
-            }
-            timer.start();
-        });
-
-    // Bind keyboard shortcut for starting/pausing timer
-    Mousetrap.bind('space', function(e) {
-        // Remove default behavior of buttons (page scrolling)
-        if (e.preventDefault) {
-            e.preventDefault();
+    document.getElementById('btn_custom').addEventListener('click', function () {
+        var customUnits = document.getElementById('custom_units').value;
+        if (customUnits === 'minutes') {
+            resetMainTimer(customTimeInput.value * 60);
+        } else if (customUnits === 'hours') {
+            resetMainTimer(customTimeInput.value * 3600);
         } else {
-            e.returnValue = false; //IE
+            resetMainTimer(customTimeInput.value);
         }
-
-        // Pause or start the timer
-        if(timer.isRunning) {
-            timer.pause();
-        } else {
-            timer.start();
-        }
+        timer.start();
     });
 };
+
 
 document.getElementById('btn_start').addEventListener('click', function () {
     document.getElementById('btn_start').style.display = 'none';  // Скрываем кнопку START
@@ -222,20 +209,3 @@ document.getElementById('btn_pause').addEventListener('click', function () {
     document.getElementById('btn_start').style.display = 'inline';  // Показываем кнопку START
     timer.pause();  // Приостанавливаем таймер
 });
-
-document.getElementById('btn_pomodoro').addEventListener('click', function () {
-    resetMainTimer(25 * 60);  // Установить таймер на 25 минут
-    timer.start();  // Запустить таймер
-});
-
-document.getElementById('btn_shortbreak').addEventListener('click', function () {
-    resetMainTimer(5 * 60);  // Установить таймер на 5 минут
-    timer.start();  // Запустить таймер
-});
-
-document.getElementById('btn_longbreak').addEventListener('click', function () {
-    resetMainTimer(15 * 60);  // Установить таймер на 15 минут
-    timer.start();  // Запустить таймер
-});
-
-
