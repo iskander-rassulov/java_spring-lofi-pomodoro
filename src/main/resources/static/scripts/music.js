@@ -23,15 +23,19 @@ let currentTrack = 0;
 
 document.getElementById('buttonDefault').addEventListener('click', function() {
     playDefaultPlaylist(0); // Запуск Default плейлиста
+    document.body.style.backgroundImage = "url('images/defaultwallp.jpg')"; // Изменение фона
 });
 
 document.getElementById('buttonHalloween').addEventListener('click', function() {
     playHalloweenPlaylist(0); // Запуск Halloween плейлиста
+    document.body.style.backgroundImage = "url('images/halloweenwallp.jpg')"; // Изменение фона
 });
 
 document.getElementById('buttonMedieval').addEventListener('click', function() {
     playMedievalPlaylist(0); // Запуск Medieval плейлиста
+    document.body.style.backgroundImage = "url('images/medievalwallp.jpg')"; // Изменение фона
 });
+
 
 function playDefaultPlaylist(trackIndex) {
     currentTrack = trackIndex;

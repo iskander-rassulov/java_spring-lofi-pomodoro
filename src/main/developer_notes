@@ -34,3 +34,105 @@ border: 1px solid #023047;
                     <label for="alarm_volume" id="lbl_volume">Alarm Volume:</label><br>
                     <input type="range" id="alarm_volume" min=0 max=100 value=50>
                 </div>
+----------------------------------------------------
+<button id="btn_pause" class="btn_default">pause</button>
+            <button id="btn_reset" class="btn_default">reset</button>
+
+------------------------------------------------------
+
+<p>
+            <button id="btn_custom" class="btn_default">
+                <label for="ipt_custom">custom</label>
+            </button>
+            <input type="number" id="ipt_custom" value="45" min="0" max="100000000">
+            <select id="custom_units">
+                <option value="seconds">seconds</option>
+                <option value="minutes" selected>minutes</option>
+                <option value="hours">hours</option>
+            </select>
+        </p>
+        <p>
+            <button id="btn_pomodoro" class="btn_default">pomodoro (25m)</button>
+            <button id="btn_shortbreak" class="btn_default">short break (5m)</button>
+            <button id="btn_longbreak" class="btn_default">long break (15m)</button>
+        </p>
+--------------------------------------------------------------
+/** Revert the favicon to red, delete the old timer
+        object, and start a new one. */
+    function resetMainTimer(seconds) {
+        changeFavicon('red');
+        timer.pause();
+        timer = new CountdownTimer(seconds);
+        timer.onTick(setTimeOnAllDisplays);
+    }
+
+    // Set default page timer displays
+    setTimeOnAllDisplays(timeObj.minutes, timeObj.seconds);
+
+    timer.onTick(setTimeOnAllDisplays);
+
+    // Add listeners for start, pause, etc. buttons
+    document.getElementById('btn_start').addEventListener(
+        'click', function () {
+            timer.start();
+        });
+
+    document.getElementById('btn_pause').addEventListener(
+        'click', function () {
+            timer.pause();
+        });
+
+    document.getElementById('btn_reset').addEventListener(
+        'click', function () {
+            resetMainTimer(timer.seconds);
+            timer.start();
+        });
+
+    document.getElementById('btn_pomodoro').addEventListener(
+        'click', function () {
+            resetMainTimer(25*60);
+            timer.start();
+        });
+
+    document.getElementById('btn_shortbreak').addEventListener(
+        'click', function () {
+            resetMainTimer(5*60);
+            timer.start();
+        });
+
+    document.getElementById('btn_longbreak').addEventListener(
+        'click', function () {
+            resetMainTimer(15*60);
+            timer.start();
+        });
+
+    document.getElementById('btn_custom').addEventListener(
+        'click', function () {
+            var customUnits = document.getElementById('custom_units').value;
+            if (customUnits === 'minutes') {
+                resetMainTimer(customTimeInput.value * 60);
+            } else if (customUnits === 'hours') {
+                resetMainTimer(customTimeInput.value * 3600);
+            } else {
+                resetMainTimer(customTimeInput.value);
+            }
+            timer.start();
+        });
+
+    // Bind keyboard shortcut for starting/pausing timer
+    Mousetrap.bind('space', function(e) {
+        // Remove default behavior of buttons (page scrolling)
+        if (e.preventDefault) {
+            e.preventDefault();
+        } else {
+            e.returnValue = false; //IE
+        }
+
+        // Pause or start the timer
+        if(timer.isRunning) {
+            timer.pause();
+        } else {
+            timer.start();
+        }
+    });
+};

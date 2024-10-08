@@ -131,13 +131,13 @@ window.onload = function () {
         timerDisplay.textContent = clockHours + clockMinutes + clockSeconds;
     }
 
-    /** Revert the favicon to red, delete the old timer
-        object, and start a new one. */
+    /** Обновленная функция для сброса таймера */
     function resetMainTimer(seconds) {
-        changeFavicon('red');
-        timer.pause();
-        timer = new CountdownTimer(seconds);
-        timer.onTick(setTimeOnAllDisplays);
+        changeFavicon('red');  // Изменение иконки
+        timer.pause();  // Останавливаем текущий таймер, если он работает
+        timer = new CountdownTimer(seconds);  // Инициализируем новый таймер
+        timer.onTick(setTimeOnAllDisplays);  // Обновляем отображение времени при каждом тике
+        setTimeOnAllDisplays(Math.floor(seconds / 60), seconds % 60);  // Сразу обновляем отображение
     }
 
     // Set default page timer displays
@@ -210,3 +210,32 @@ window.onload = function () {
         }
     });
 };
+
+document.getElementById('btn_start').addEventListener('click', function () {
+    document.getElementById('btn_start').style.display = 'none';  // Скрываем кнопку START
+    document.getElementById('btn_pause').style.display = 'inline';  // Показываем кнопку PAUSE
+    timer.start();  // Запускаем таймер
+});
+
+document.getElementById('btn_pause').addEventListener('click', function () {
+    document.getElementById('btn_pause').style.display = 'none';  // Скрываем кнопку PAUSE
+    document.getElementById('btn_start').style.display = 'inline';  // Показываем кнопку START
+    timer.pause();  // Приостанавливаем таймер
+});
+
+document.getElementById('btn_pomodoro').addEventListener('click', function () {
+    resetMainTimer(25 * 60);  // Установить таймер на 25 минут
+    timer.start();  // Запустить таймер
+});
+
+document.getElementById('btn_shortbreak').addEventListener('click', function () {
+    resetMainTimer(5 * 60);  // Установить таймер на 5 минут
+    timer.start();  // Запустить таймер
+});
+
+document.getElementById('btn_longbreak').addEventListener('click', function () {
+    resetMainTimer(15 * 60);  // Установить таймер на 15 минут
+    timer.start();  // Запустить таймер
+});
+
+

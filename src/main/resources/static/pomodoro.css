@@ -1,7 +1,7 @@
 body {
 	margin: auto;
     text-align: center;
-	background-image: url('https://wallpapercave.com/wp/wp5694359.jpg');
+	background-image: url('images/defaultwallp.jpg');
 	background-size: cover;
 	background-position: center;
 	font-family: Arial, sans-serif;
@@ -28,7 +28,7 @@ h1 {
 }
 footer {
 	padding: 10px 0px;
-	border-top: thin solid #777;
+	border-top: thin solid #ffffff;
 }
 #title {
 	font-size: 4em;
@@ -41,12 +41,19 @@ footer {
 }
 .content {
 	padding: 20px 0px 40px 0px;
+	height: 500px;
 }
 #timer {
-    font-size: 6em;
+    font-size: 12em;
     font-weight: bold;
 	color: white;
+	text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.8);
 }
+
+#titlebox{
+	font-family: 'Roboto';
+}
+
 button.btn_default {
 	padding: 8px 12px;
     margin: 2px 0px;
@@ -56,20 +63,58 @@ button.btn_default {
 	border: 1px solid;
 }
 
+#btn_pomodoro{
+	margin-right:10px;
+	font-size: 18px;
+	background-color: #2d2d2d33;
+	border: 3px solid white;
+	color: #ffffff;
+	border-radius: 10px;
+	text-shadow: 8px 8px 16px rgba(0, 0, 0, 1);
+}
+
+#btn_shortbreak{
+	margin-right:10px;
+	font-size: 18px;
+	background-color: #2d2d2d33;
+	border: 3px solid white;
+	color: #ffffff;
+	border-radius: 10px;
+	text-shadow: 8px 8px 16px rgba(0, 0, 0, 1);
+}
+
+#btn_longbreak{
+	font-size: 18px;
+	background-color: #2d2d2d33;
+	border: 3px solid white;
+	color: #ffffff;
+	border-radius: 10px;
+	text-shadow: 8px 8px 16px rgba(0, 0, 0, 1);
+}
+
 #btn_custom{
 	background-color: #1d3557;
 	border: 1px solid white;
 	color: white;
 }
 #btn_start {
-    background-color: #386641;
-	border: 1px solid white;
-	color: white;
+	margin-top: 150px;
+	font-size: 36px;
+    background-color: #2d2d2d33;
+	border: 3px solid white;
+	color: #ffffff;
+	border-radius: 10px;
+	text-shadow: 8px 8px 16px rgba(0, 0, 0, 1);
+
 }
 #btn_pause {
-    background-color: #cc5803;
-	border: 1px solid white;
-	color: white;
+	margin-top: 150px;
+	font-size: 36px;
+	background-color: #2d2d2d33;
+	border: 3px solid white;
+	color: #ffffff;
+	border-radius: 10px;
+	text-shadow: 8px 8px 16px rgba(0, 0, 0, 1);
 }
 #btn_reset {
     background-color: #540b0e;
@@ -120,16 +165,24 @@ div.footerbox ol {
 }
 .credits {
     margin: 2em 0;
-    color: #999;
+    color: #ffffff;
 }
 
 #button-container{
 	align-content: left;
 }
 
+#audioPlayer {
+	background-color: #ffffff;
+	border-radius: 10px;
+	padding: 15px;
+	width: 100%;
+	margin: 20px 0;
+}
+
 /* Центрированный контейнер с прозрачностью */
 .main_container {
-	background-color: rgba(0, 0, 0, 0.85); /* черный с 70% прозрачностью */
+	background-color: rgba(0, 0, 0, 0.3); /* черный с 70% прозрачностью */
 	width: 50%;
 	margin: 0 auto;
 	padding: 20px;
@@ -191,6 +244,7 @@ div.footerbox ol {
 	overflow: hidden;
 	border-radius: 10px;
 	transition: transform 0.3s ease-in-out;
+	border: 2px solid #ababab;
 }
 
 .button img {
@@ -218,6 +272,10 @@ div.footerbox ol {
 /* Увеличение кнопок при наведении */
 .button:hover {
 	transform: scale(1.1); /* Увеличение на 10% */
+}
+
+#buttonHalloween{
+
 }
 
 
