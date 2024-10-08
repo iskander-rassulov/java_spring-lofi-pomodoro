@@ -13,7 +13,9 @@
           href='http://fonts.googleapis.com/css?family=Indie+Flower'>
     <link rel="stylesheet" href="pomodoro.css">
 </head>
+
 <body>
+
 <div class="main_container">
     <header>
         <div id="titlebox">
@@ -21,6 +23,9 @@
             <div id="subtitle">A simple workflow tool</div>
         </div>
     </header>
+
+
+
     <div class="content">
         <p>
         <div><span id="timer"></span></div>
@@ -46,38 +51,31 @@
         </p>
 
     </div>
+
     <footer>
-        <div class="footerbox">
-            <h1>How it works:</h1>
-            <ol>
-                <li>Choose a task to focus on</li>
-                <li>Work for 25 uninterrupted minutes</li>
-                <li>Break for 5 minutes</li>
-                <li>Every four cycles, take a 15-30 minute<br>
-                    break instead, preferably outside</li>
-            </ol>
-            <br>
-            <a href="https://en.wikipedia.org/wiki/Pomodoro_Technique" target="_blank">
-                Read more at Wikipedia
-            </a>
+            <div class="button-container">
+                <div id="buttonDefault" class="button">
+                    <img src="images/defaultwallp.jpg" alt="Default Lofi">
+                    <div class="overlay">
+                        <p>Default Lofi</p>
+                    </div>
+                </div>
+
+                <div id="buttonHalloween" class="button">
+                    <img src="images/halloweenwallp.jpg" alt="Halloween Lofi">
+                    <div class="overlay">
+                        <p>Halloween Lofi</p>
+                    </div>
+                </div>
+
+                <div id="buttonMedieval" class="button">
+                    <img src="images/medievalwallp.jpg" alt="Medieval Lofi">
+                    <div class="overlay">
+                        <p>Medieval Lofi</p>
+                    </div>
+                </div>
         </div>
-        <div class="footerbox">
-            <h1>Options:</h1>
-            <div id="options">
-                <label for="alarm_select" id="lbl_alarm">Alarm:</label><br>
-                <select id="alarm_select">
-                    <option value="none">None</option>
-                    <option value="alarm_chime">Chime</option>
-                    <option value="alarm_bell" selected>Bell</option>
-                    <option value="alarm_beeps">Beeps</option>
-                    <option value="alarm_boops">Boops</option>
-                </select>
-                <br><br>
-                <label for="alarm_volume" id="lbl_volume">Alarm Volume:</label><br>
-                <input type="range" id="alarm_volume" min=0 max=100 value=50>
-            </div>
-            <br>
-        </div>
+
         <div class="credits">
             Created by
             <a href="../index.html">Andy Roche</a> -
@@ -86,40 +84,33 @@
     </footer>
 </div>
 
-<div class="side-container">
+<div class="todo-container">
     <header>
         <h1>To-do list</h1>
     </header>
     <p>This is an additional container.</p>
 </div>
 
-<div class="button-container">
-
+<div class="settings-container">
     <header>
-        <h1>Lofi Radio</h1>
-        <p>You can choose which lofi radio to listen</p>
+        <h1>Settings here</h1>
     </header>
 
-    <div id="buttonDefault" class="button">
-        <img src="images/defaultwallp.jpg" alt="Default Lofi">
-        <div class="overlay">
-            <p>Default Lofi</p>
-        </div>
+    <div id="options">
+        <br>
+        <label for="alarm_select" id="lbl_alarm">Alarm:</label><br>
+        <select id="alarm_select">
+            <option value="none">None</option>
+            <option value="alarm_chime">Chime</option>
+            <option value="alarm_bell" selected>Bell</option>
+            <option value="alarm_beeps">Beeps</option>
+            <option value="alarm_boops">Boops</option>
+        </select>
+        <br>
+        <label for="alarm_volume" id="lbl_volume">Alarm Volume:</label><br>
+        <input type="range" id="alarm_volume" min=0 max=100 value=50>
     </div>
 
-    <div id="buttonHalloween" class="button">
-        <img src="images/halloweenwallp.jpg" alt="Halloween Lofi">
-        <div class="overlay">
-            <p>Halloween Lofi</p>
-        </div>
-    </div>
-
-    <div id="buttonMedieval" class="button">
-        <img src="images/medievalwallp.jpg" alt="Medieval Lofi">
-        <div class="overlay">
-            <p>Medieval Lofi</p>
-        </div>
-    </div>
 </div>
 
 
@@ -131,8 +122,14 @@
     <source src="audio/three_beeps.mp3" type="audio/mpeg"></audio>
 <audio id="alarm_boops">
     <source src="audio/three_boops.mp3" type="audio/mpeg"></audio>
+
+<audio id="audioPlayer" controls style="display:none;">
+    <source id="audioSource" src="" type="audio/mpeg">
+</audio>
+
 <!-- Audio courtesy of https://soundcloud.com/andyouarewho -->
 <script type="text/javascript" src="../resources/mousetrap.js"></script>
-<script type="text/javascript" src="pomodoro.js"></script>
+<script type="text/javascript" src="scripts/pomodoro.js"></script>
+<script type="text/javascript" src="scripts/music.js"></script>
 </body>
 </html>

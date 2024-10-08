@@ -1,47 +1,47 @@
 const audioPlayer = document.getElementById('audioPlayer');
 const audioSource = document.getElementById('audioSource');
 
-const defaulPlaylist = [
+const defaultPlaylist = [
     '/audio/memoria.mp3',
-    'audio/song2.mp3',
-    'audio/song3.mp3'
+    '/audio/song2.mp3',
+    '/audio/song3.mp3'
 ];
 
 const medievalPlaylist = [
     '/audio/memoria.mp3',
-    'audio/song2.mp3',
-    'audio/song3.mp3'
+    '/audio/song2.mp3',
+    '/audio/song3.mp3'
 ];
 
 const halloweenPlaylist = [
     '/audio/memoria.mp3',
-    'audio/song2.mp3',
-    'audio/song3.mp3'
+    '/audio/song2.mp3',
+    '/audio/song3.mp3'
 ];
 
 let currentTrack = 0;
 
-document.getElementById('button1').addEventListener('click', function() {
-    playDefaultPalylist(0);
+document.getElementById('buttonDefault').addEventListener('click', function() {
+    playDefaultPlaylist(0); // Запуск Default плейлиста
 });
 
-document.getElementById('button2').addEventListener('click', function() {
-    playMedievalPalylist(0);
+document.getElementById('buttonHalloween').addEventListener('click', function() {
+    playHalloweenPlaylist(0); // Запуск Halloween плейлиста
 });
 
-document.getElementById('button3').addEventListener('click', function() {
-    playHalloweenPalylist(0);
+document.getElementById('buttonMedieval').addEventListener('click', function() {
+    playMedievalPlaylist(0); // Запуск Medieval плейлиста
 });
 
-function playDefaultPalylist(trackIndex) {
+function playDefaultPlaylist(trackIndex) {
     currentTrack = trackIndex;
-    audioSource.src = defaulPlaylist[trackIndex];
+    audioSource.src = defaultPlaylist[trackIndex];
     audioPlayer.load();
     audioPlayer.style.display = 'block';
     audioPlayer.play();
 }
 
-function playMedievalPalylist(trackIndex) {
+function playMedievalPlaylist(trackIndex) {
     currentTrack = trackIndex;
     audioSource.src = medievalPlaylist[trackIndex];
     audioPlayer.load();
@@ -49,7 +49,7 @@ function playMedievalPalylist(trackIndex) {
     audioPlayer.play();
 }
 
-function playHalloweenPalylist(trackIndex) {
+function playHalloweenPlaylist(trackIndex) {
     currentTrack = trackIndex;
     audioSource.src = halloweenPlaylist[trackIndex];
     audioPlayer.load();
@@ -59,6 +59,6 @@ function playHalloweenPalylist(trackIndex) {
 
 // Автоматическое воспроизведение следующего трека по завершению
 audioPlayer.addEventListener('ended', function() {
-    currentTrack = (currentTrack + 1) % playlist.length;  // Цикл по плейлисту
+    currentTrack = (currentTrack + 1) % defaultPlaylist.length;  // Цикл по плейлисту
     playAudio(currentTrack);
 });

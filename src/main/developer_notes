@@ -19,3 +19,18 @@ display: inline-block;
 
 background-color: #669bbc;
 border: 1px solid #023047;
+----------------------------------------------------
+<div id="options">
+                    <h1>Options:</h1>
+                    <label for="alarm_select" id="lbl_alarm">Alarm:</label><br>
+                    <select id="alarm_select">
+                        <option value="none">None</option>
+                        <option value="alarm_chime">Chime</option>
+                        <option value="alarm_bell" selected>Bell</option>
+                        <option value="alarm_beeps">Beeps</option>
+                        <option value="alarm_boops">Boops</option>
+                    </select>
+                    <br><br>
+                    <label for="alarm_volume" id="lbl_volume">Alarm Volume:</label><br>
+                    <input type="range" id="alarm_volume" min=0 max=100 value=50>
+                </div>
