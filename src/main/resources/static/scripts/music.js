@@ -8,13 +8,13 @@ const defaultPlaylist = [
 ];
 
 const medievalPlaylist = [
-    '/audio/memoria.mp3',
+    '/audio/rising_queen.mp3',
     '/audio/song2.mp3',
     '/audio/song3.mp3'
 ];
 
 const halloweenPlaylist = [
-    '/audio/memoria.mp3',
+    '/audio/31_october.mp3',
     '/audio/song2.mp3',
     '/audio/song3.mp3'
 ];

@@ -137,7 +137,7 @@ window.onload = function () {
         document.getElementById(buttonId).classList.add('active');
         console.log('Active button set: ', document.getElementById(buttonId).classList);
     }
-
+    setActiveButton('btn_pomodoro');
 
     setTimeOnAllDisplays(timeObj.minutes, timeObj.seconds);
     timer.onTick(setTimeOnAllDisplays);
