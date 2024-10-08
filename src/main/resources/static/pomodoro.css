@@ -126,7 +126,7 @@ div.footerbox ol {
 
 /* Центрированный контейнер с прозрачностью */
 .main_container {
-	background-color: rgba(0, 0, 0, 0.8); /* черный с 70% прозрачностью */
+	background-color: rgba(0, 0, 0, 0.85); /* черный с 70% прозрачностью */
 	width: 50%;
 	margin: 0 auto;
 	padding: 20px;
@@ -140,7 +140,7 @@ div.footerbox ol {
 
 /* Новый контейнер справа */
 .side-container {
-	background-color: rgba(0, 0, 0, 0.8); /* Тот же фон, что и у основного контейнера */
+	background-color: #242423; /* Тот же фон, что и у основного контейнера */
 	width: 20%; /* Уже, чем основной контейнер */
 	height: 80%;
 	padding: 20px;
@@ -152,3 +152,63 @@ div.footerbox ol {
 	border-radius: 15px;
 	color: white;
 }
+
+
+
+/* Контейнер для кнопок, с вертикальным выравниванием */
+.button-container {
+	background-color: rgba(0, 0, 0, 0.5); /* Полупрозрачный чёрный фон */
+	color: white;
+	width: 20%; /* Ширина контейнера */
+	padding: 20px;
+	text-align: center;
+	position: absolute;
+	top: 50%;
+	left: calc(50% - 900px); /* Расположим контейнер слева от центра */
+	transform: translateY(-50%);
+	border-radius: 15px;
+	gap: 20px; /* Отступы между кнопками */
+	display: flex;
+	flex-direction: column; /* Кнопки будут выстроены вертикально */
+	justify-content: center;
+	align-items: center;
+}
+
+
+/* Общие стили для всех кнопок */
+.button {
+	position: relative;
+	width: 300px;
+	height: 100px; /* Соотношение 3:1 */
+	overflow: hidden;
+	border-radius: 10px;
+	transition: transform 0.3s ease-in-out;
+}
+
+.button img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.button .overlay {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.6); /* Чёрный с прозрачностью */
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	color: white;
+	font-size: 1.5em;
+	font-weight: bold;
+}
+
+/* Увеличение кнопок при наведении */
+.button:hover {
+	transform: scale(1.1); /* Увеличение на 10% */
+}
+
+
