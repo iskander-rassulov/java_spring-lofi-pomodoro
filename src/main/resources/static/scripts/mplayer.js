@@ -1,41 +1,24 @@
-const image = document.getElementById('cover'),
-title = document.getElementById('music-title'),
-artist = document.getElementById('music-artist'),
-currentTimeEl = document.getElementById('current-time'),
-durationEl = document.getElementById('duration'),
-progress = document.getElementById('progress'),
-playerProgress = document.getElementById('player-progress'),
-prevBtn = document.getElementById('prev'),
-nextBtn = document.getElementById('next'),
-playBtn = document.getElementById('play'),
-background = document.getElementById('bg-img');
+// Получение элементов в новом music-container
+const image = document.getElementById('cover');
+const title = document.getElementById('music-title');
+const artist = document.getElementById('music-artist');
+const currentTimeEl = document.getElementById('current-time');
+const durationEl = document.getElementById('duration');
+const progress = document.getElementById('progress');
+const playerProgress = document.getElementById('player-progress');
+const prevBtn = document.getElementById('prev');
+const nextBtn = document.getElementById('next');
+const playBtn = document.getElementById('play');
+const background = document.getElementById('bg-img');
 
+// Используем объект Audio
 const music = new Audio();
-
-const songs = [
-    {
-        path: 'audio/default_music/memoria.mp3',
-        displayName: 'Memoria',
-        cover: 'images/defaultwallp.jpg',
-        artist: 'nezn ayu',
-    },
-    {
-        path: 'assets/2.mp3',
-        displayName: 'You Will Never See Me Coming',
-        cover: 'assets/2.jpg',
-        artist: 'NEFFEX',
-    },
-    {
-        path: 'assets/3.mp3',
-        displayName: 'Intellect',
-        cover: 'assets/3.jpg',
-        artist: 'Yung Logos',
-    }
-];
 
 let musicIndex = 0;
 let isPlaying = false;
+let currentPlaylist = [];
 
+// Функция для воспроизведения музыки
 function togglePlay() {
     if (isPlaying) {
         pauseMusic();
@@ -46,18 +29,14 @@ function togglePlay() {
 
 function playMusic() {
     isPlaying = true;
-    // Change play button icon
     playBtn.classList.replace('fa-play', 'fa-pause');
-    // Set button hover title
     playBtn.setAttribute('title', 'Pause');
     music.play();
 }
 
 function pauseMusic() {
     isPlaying = false;
-    // Change pause button icon
     playBtn.classList.replace('fa-pause', 'fa-play');
-    // Set button hover title
     playBtn.setAttribute('title', 'Play');
     music.pause();
 }
@@ -71,8 +50,8 @@ function loadMusic(song) {
 }
 
 function changeMusic(direction) {
-    musicIndex = (musicIndex + direction + songs.length) % songs.length;
-    loadMusic(songs[musicIndex]);
+    musicIndex = (musicIndex + direction + currentPlaylist.length) % currentPlaylist.length;
+    loadMusic(currentPlaylist[musicIndex]);
     playMusic();
 }
 
@@ -92,6 +71,7 @@ function setProgressBar(e) {
     music.currentTime = (clickX / width) * music.duration;
 }
 
+// Обработчики для кнопок
 playBtn.addEventListener('click', togglePlay);
 prevBtn.addEventListener('click', () => changeMusic(-1));
 nextBtn.addEventListener('click', () => changeMusic(1));
@@ -99,4 +79,110 @@ music.addEventListener('ended', () => changeMusic(1));
 music.addEventListener('timeupdate', updateProgressBar);
 playerProgress.addEventListener('click', setProgressBar);
 
-loadMusic(songs[musicIndex]);
+// Плейлисты для кнопок
+const defaultPlaylist = [
+    {
+        path: 'audio/default_music/memoria.mp3',
+        displayName: 'Memoria',
+        cover: 'images/defaultwallp.jpg',
+        artist: 'nezn ayu',
+    },
+    {
+        path: 'audio/default_music/song2.mp3',
+        displayName: 'Another Lofi Track',
+        cover: 'images/defaultwallp.jpg',
+        artist: 'Artist 2',
+    }
+];
+
+const halloweenPlaylist = [
+    {
+        path: 'audio/halloween_music/31_october.mp3',
+        displayName: 'Spooky Lofi',
+        cover: 'images/halloweenwallp.jpg',
+        artist: 'Spooky Artist',
+    },
+    {
+        path: 'audio/halloween_music/scary.mp3',
+        displayName: 'Scary Track',
+        cover: 'images/halloweenwallp.jpg',
+        artist: 'Scary Artist',
+    }
+];
+
+const medievalPlaylist = [
+    {
+        path: 'audio/medieval_music/rising_queen.mp3',
+        displayName: 'Medieval Vibes',
+        cover: 'images/medievalwallp.jpg',
+        artist: 'Medieval Artist',
+    },
+    {
+        path: 'audio/medieval_music/castle.mp3',
+        displayName: 'Castle Lofi',
+        cover: 'images/medievalwallp.jpg',
+        artist: 'Castle Artist',
+    }
+];
+
+// Функция для смены фона и плейлиста
+function changePlaylistAndBackground(playlist, videoSrc) {
+    console.log('Смена плейлиста и фона...');
+
+    currentPlaylist = playlist; // Обновляем текущий плейлист
+    musicIndex = 0; // Сбрасываем индекс на начало
+    loadMusic(currentPlaylist[musicIndex]);
+    playMusic();
+
+    // Меняем фоновое видео
+    const backgroundVideo = document.getElementById('backgroundVideo');
+    const source = backgroundVideo.querySelector('source');
+    source.setAttribute('src', videoSrc); // Меняем источник видео
+    backgroundVideo.load(); // Перезагружаем видео
+    backgroundVideo.play(); // Проигрываем новое видео
+}
+
+
+// Обработчики для кнопок
+document.getElementById('buttonDefault').addEventListener('click', () => {
+    console.log('Кнопка Default нажата.');
+    changePlaylistAndBackground(defaultPlaylist, 'images/defaultwallp.jpg');
+});
+
+document.getElementById('buttonHalloween').addEventListener('click', () => {
+    console.log('Кнопка Halloween нажата.');
+    changePlaylistAndBackground(halloweenPlaylist, 'images/halloweenwallp.jpg');
+});
+
+document.getElementById('buttonMedieval').addEventListener('click', function (){
+    console.log('Кнопка Medieval нажата.');
+    changePlaylistAndBackground(medievalPlaylist);
+});
+
+document.getElementById('buttonDefault').addEventListener('click', function() {
+    const backgroundVideo = document.getElementById('backgroundVideo');
+    const source = backgroundVideo.querySelector('source');
+    source.setAttribute('src', 'videos/defaultvid.mp4'); // Меняем источник видео
+    backgroundVideo.load(); // Перезагружаем видео
+    backgroundVideo.play(); // Проигрываем новое видео
+});
+
+
+document.getElementById('buttonHalloween').addEventListener('click', function() {
+    const backgroundVideo = document.getElementById('backgroundVideo');
+    const source = backgroundVideo.querySelector('source');
+    source.setAttribute('src', 'videos/halloweenvid.mp4'); // Меняем источник видео
+    backgroundVideo.load(); // Перезагружаем видео
+    backgroundVideo.play(); // Проигрываем новое видео
+});
+
+document.getElementById('buttonMedieval').addEventListener('click', function() {
+    const backgroundVideo = document.getElementById('backgroundVideo');
+    const source = backgroundVideo.querySelector('source');
+    source.setAttribute('src', 'videos/medievalvid.mp4'); // Меняем источник видео
+    backgroundVideo.load(); // Перезагружаем видео
+    backgroundVideo.play(); // Проигрываем новое видео
+});
+
+
+loadMusic(defaultPlaylist[0]);

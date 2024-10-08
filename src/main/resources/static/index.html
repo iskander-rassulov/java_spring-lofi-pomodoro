@@ -14,6 +14,14 @@
     <link rel="stylesheet" href="pomodoro.css">
     <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <video id="backgroundVideo"
+           autoplay muted loop playsinline>
+        <source src="videos/defaultvid.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+
 </head>
 
 <body>
@@ -22,7 +30,7 @@
 
         <div id="titlebox">
             <div id="title">Lofi Pomodoro</div>
-            <div id="subtitle">A simple workflow tool</div>
+            <div id="subtitle">A simple tool for workflow organization</div>
         </div>
 
 
@@ -43,6 +51,7 @@
 
     <footer>
             <div class="button-container">
+
                 <div id="buttonDefault" class="button">
                     <img src="images/defaultwallp.jpg" alt="Default Lofi">
                     <div class="overlay">
@@ -66,13 +75,9 @@
         </div>
 
         <div class="credits">
-            Created by -
-            Iskandar Rassulov -
+            Created by - Iskandar Rassulov -
             <a href="https://github.com/iskander-rassulov">Github</a>
         </div>
-        <audio id="audioPlayer" controls style="display: none">
-            <source id="audioSource" src="" type="audio/mpeg">
-        </audio>
 
     </footer>
 </div>
@@ -101,39 +106,6 @@
 
 </div>
 
-<!--<div class="todo-container">-->
-<!--    <header>-->
-<!--        <h1>To-do list</h1>-->
-<!--    </header>-->
-<!--    <p>This is an additional container.</p>-->
-<!--</div>-->
-
-<!--<div class="settings-container">-->
-<!--    <header>-->
-<!--        <h1>Settings</h1>-->
-<!--    </header>-->
-
-<!--    <div id="options">-->
-<!--        <br>-->
-<!--        <label for="alarm_select" id="lbl_alarm">Alarm:</label><br>-->
-<!--        <select id="alarm_select">-->
-<!--            <option value="none">None</option>-->
-<!--            <option value="alarm_chime">Chime</option>-->
-<!--            <option value="alarm_bell" selected>Bell</option>-->
-<!--            <option value="alarm_beeps">Beeps</option>-->
-<!--            <option value="alarm_boops">Boops</option>-->
-<!--        </select>-->
-<!--        <br>-->
-<!--        <label for="alarm_volume" id="lbl_volume">Alarm Volume:</label><br>-->
-<!--        <input type="range" id="alarm_volume" min=0 max=100 value=50>-->
-<!--    </div>-->
-<!--    <br><br>-->
-<!--    Audio Player settings<br><br>-->
-<!--    <audio id="audioPlayer" controls style="">-->
-<!--        <source id="audioSource" src="" type="audio/mpeg">-->
-<!--    </audio>-->
-
-<!--</div>-->
 
 <audio id="alarm_chime">
     <source src="audio/one_chime.mp3" type="audio/mpeg"></audio>
@@ -146,6 +118,5 @@
 
 <script type="text/javascript" src="scripts/mplayer.js"></script>
 <script type="text/javascript" src="scripts/pomodoro.js"></script>
-<!--<script type="text/javascript" src="scripts/music.js"></script>-->
 </body>
 </html>
