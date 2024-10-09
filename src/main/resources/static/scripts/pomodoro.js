@@ -8,12 +8,13 @@ function CountdownTimer(seconds, tickRate) {
     this.timerId = null; // ID таймера для setTimeout
 }
 
-// Метод для старта таймера
-CountdownTimer.prototype.start = function() {
-    if (this.isRunning) return; // Если таймер уже запущен, ничего не делаем
 
-    this.isRunning = true; // Устанавливаем флаг работы таймера
-    hideTimeAdjustmentButtons(); // Скрываем кнопки увеличения/уменьшения времени
+/// Включаем сброс на текущий режим после завершения
+CountdownTimer.prototype.start = function() {
+    if (this.isRunning) return;
+
+    this.isRunning = true;
+    hideTimeAdjustmentButtons();
     const startTime = Date.now();
     let thisTimer = this;
 
@@ -27,11 +28,7 @@ CountdownTimer.prototype.start = function() {
             if (secondsRemaining > 0) {
                 thisTimer.timerId = setTimeout(tick, thisTimer.tickRate);
             } else {
-                thisTimer.remaining = 0;
-                thisTimer.isRunning = false;
-                playAlarm();
-                changeFavicon('green');
-                showTimeAdjustmentButtons(); // Показываем кнопки увеличения/уменьшения времени после завершения
+                thisTimer.end();  // Вызов метода завершения
             }
         }
 
@@ -73,31 +70,34 @@ function parseSeconds(seconds) {
     };
 }
 
-// Функция воспроизведения сигнала
-function playAlarm() {
-    var alarmValue = document.getElementById('alarm_select').value;
-    if (alarmValue !== 'none') {
-        var alarmAudio = document.getElementById(alarmValue);
-        var alarmVolume = document.getElementById('alarm_volume').value;
-        alarmAudio.volume = alarmVolume / 100;
+// Функция для воспроизведения уведомления в зависимости от плейлиста
+function playCustomAlarm() {
+    const backgroundVideo = document.getElementById('backgroundVideo').querySelector('source').getAttribute('src');
+    let alarmAudio;
+
+    if (backgroundVideo.includes('defaultvid')) {
+        alarmAudio = new Audio('audio/defaultAlarm.mp3');
+    } else if (backgroundVideo.includes('halloweenvid')) {
+        alarmAudio = new Audio('audio/halloweenAlarm.mp3');
+    } else if (backgroundVideo.includes('medievalvid')) {
+        alarmAudio = new Audio('audio/medievalAlarm.mp3');
+    }
+
+    if (alarmAudio) {
+        alarmAudio.volume = 1;  // Максимальная громкость для уведомления
         alarmAudio.play();
     }
 }
 
 // Функция изменения фавикона
-function changeFavicon(color) {
-    document.head = document.head || document.getElementsByTagName('head')[0];
-    var newFavicon = document.createElement('link'),
-    oldFavicon = document.getElementById('dynamic-favicon');
-    newFavicon.id = 'dynamic-favicon';
-    newFavicon.type = 'image/ico';
-    newFavicon.rel = 'icon';
-    newFavicon.href = 'images/' + color + '_tomato.ico';
+// Функция для смены иконки сайта
+function changeFavicon(status) {
+    const favicon = document.getElementById('dynamic-favicon') || document.createElement('link');
+    favicon.id = 'dynamic-favicon';
+    favicon.rel = 'icon';
+    favicon.href = status === 'active' ? 'images/active.jpg' : 'images/inactive.png';
 
-    if (oldFavicon) {
-        document.head.removeChild(oldFavicon);
-    }
-    document.head.appendChild(newFavicon);
+    document.head.appendChild(favicon);
 }
 
 // Функции для скрытия/показа кнопок увеличения и уменьшения времени
@@ -117,18 +117,24 @@ window.onload = function() {
     let shortBreakTime = 5 * 60;  // 5 минут
     let longBreakTime = 15 * 60;  // 15 минут
     let currentModeTime = pomodoroTime;  // Время по умолчанию для Pomodoro
+    let currentMode = 'pomodoro'; // Изначально режим Pomodoro
 
     const MAX_TIME_LIMIT = 995 * 60;  // Максимум 995 минут
     var timerDisplay = document.getElementById('timer');
     var currentTimeDisplay = document.getElementById('currentTimeDisplay');
     var timer = new CountdownTimer(currentModeTime);
+    timer.onTick(setTimeOnAllDisplays);
+    switchMode(pomodoroTime, 'btn_pomodoro');
+
 
     function setTimeOnAllDisplays(minutes, seconds) {
+        console.log("Updating display to:", minutes, "minutes and", seconds, "seconds");
         var clockMinutes = minutes < 10 ? '0' + minutes : minutes;
         var clockSeconds = seconds < 10 ? '0' + seconds : seconds;
         timerDisplay.textContent = clockMinutes + ':' + clockSeconds;
         document.title = '(' + minutes + 'm) Pomodoro';
     }
+
 
     function updateCurrentTimeDisplay() {
         const minutes = Math.floor(currentModeTime / 60);
@@ -138,15 +144,36 @@ window.onload = function() {
 
     // Общая функция для смены режима (Pomodoro, Short Break, Long Break)
     function switchMode(newModeTime, buttonId) {
+        console.log("Switching mode to:", buttonId, "with time:", newModeTime);
         timer.pause(); // Ставим таймер на паузу при смене режима
-        currentModeTime = newModeTime; // Устанавливаем время для нового режима
+        currentModeTime = newModeTime; // Обновляем текущее время для нового режима
         timer.remaining = newModeTime; // Обновляем оставшееся время
-        setTimeOnAllDisplays(Math.floor(newModeTime / 60), newModeTime % 60); // Обновляем отображение времени
+
+        // Прямое обновление текста таймера
+        const timerElement = document.getElementById('timer');
+        const minutes = Math.floor(newModeTime / 60);
+        const seconds = newModeTime % 60;
+        timerElement.textContent = `${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+
         setActiveButton(buttonId); // Устанавливаем активную кнопку
         document.getElementById('btn_start').style.display = 'inline'; // Делаем кнопку "Старт" активной
         document.getElementById('btn_pause').style.display = 'none'; // Скрываем кнопку "Пауза"
-        updateCurrentTimeDisplay(); // Обновляем текущее время на дисплее
+
+        // Обновляем currentMode в зависимости от кнопки
+        if (buttonId === 'btn_pomodoro') {
+            currentMode = 'pomodoro';
+        } else if (buttonId === 'btn_shortbreak') {
+            currentMode = 'shortbreak';
+        } else if (buttonId === 'btn_longbreak') {
+            currentMode = 'longbreak';
+        }
+
+        console.log("Current Mode Time:", currentModeTime); // Для отладки
+        console.log("Current Mode:", currentMode); // Для отладки
     }
+
+
+
 
     function setActiveButton(buttonId) {
         document.getElementById('btn_pomodoro').classList.remove('active');
@@ -169,22 +196,19 @@ window.onload = function() {
     // Уменьшение времени
     document.getElementById('decreaseTime').addEventListener('click', function () {
         if (timer.isRunning) return; // Не изменяем время, если таймер работает
-        if (currentModeTime > 5 * 60) {
-            currentModeTime -= 5 * 60;
-            timer.addTime(-5 * 60); // Уменьшаем время на таймере
+        if (currentModeTime > 1 * 60) {
+            currentModeTime -= 1 * 60;
+            timer.addTime(-1 * 60); // Уменьшаем время на таймере
             updateCurrentTimeDisplay();
             setTimeOnAllDisplays(Math.floor(timer.remaining / 60), timer.remaining % 60);
         }
     });
 
-    setActiveButton('btn_pomodoro');
-    setTimeOnAllDisplays(25, 0);
-    timer.onTick(setTimeOnAllDisplays);
-
     document.getElementById('btn_start').addEventListener('click', function() {
         document.getElementById('btn_pause').style.display = 'inline';
         document.getElementById('btn_start').style.display = 'none';
         timer.start();
+        changeFavicon('active');  // Меняем иконку сайта на 'active'
 
         // Воспроизведение музыки при старте таймера
         if (typeof window.playMusic === 'function') {
@@ -212,4 +236,47 @@ window.onload = function() {
     document.getElementById('btn_longbreak').addEventListener('click', function() {
         switchMode(longBreakTime, 'btn_longbreak');
     });
+
+    CountdownTimer.prototype.end = function() {
+        console.log("Timer ended. Switching to next mode.");
+        this.isRunning = false;
+
+        // Обновляем оставшееся время до нового значения перед переключением режима
+        if (currentMode === 'pomodoro') {
+            currentModeTime = 5 * 60; // Время для короткого перерыва
+            console.log("Switching to Short Break");
+            switchMode(currentModeTime, 'btn_shortbreak');
+        } else if (currentMode === 'shortbreak') {
+            currentModeTime = 25 * 60; // Время для длинного перерыва
+            console.log("Switching to Pomodoro");
+            switchMode(currentModeTime, 'btn_pomodoro');
+        } else if (currentMode === 'longbreak') {
+            currentModeTime = 25 * 60; // Время для Pomodoro
+            console.log("Switching to Pomodoro");
+            switchMode(currentModeTime, 'btn_pomodoro');
+        }
+
+        playCustomAlarm();  // Воспроизведение уведомления
+        changeFavicon('inactive');  // Меняем иконку сайта на 'inactive'
+
+        // Используем setTimeout для того, чтобы убедиться, что DOM обновится корректно
+        setTimeout(() => {
+            const timerElement = document.getElementById('timer');
+            const minutes = Math.floor(currentModeTime / 60);
+            const seconds = currentModeTime % 60;
+            timerElement.textContent = `${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+        }, 100); // Задержка на 100 мс для корректного обновления DOM
+
+        // Показываем кнопку 'Старт'
+        document.getElementById('btn_start').style.display = 'inline';
+        document.getElementById('btn_pause').style.display = 'none';
+    };
+
+
+
+
+
+
+
+
 };

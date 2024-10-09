@@ -205,3 +205,10 @@ function resetMainTimer(seconds) {
 
 // Изначальное отображение времени
 updateCurrentTimeDisplay();
+--------------------------------------------------------------------------------------------------------
+else{
+            currentModeTime = 1 * 60;
+            timer.addTime(-1 * 60);
+            updateCurrentTimeDisplay();
+            setTimeOnAllDisplays(Math.floor(timer.remaining / 60), timer.remaining % 60);
+        }
