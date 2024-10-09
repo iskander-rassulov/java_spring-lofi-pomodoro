@@ -303,7 +303,7 @@ div.footerbox ol {
 .music-container{
 	transform-origin:right;
 	background-color: #e1e1e1b3;
-	height: 400px;
+	height: 450px;
 	width: 300px;
 	border-radius: 20px;
 	box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
@@ -361,6 +361,12 @@ h3{
 	margin: 10px 0 0;
 }
 
+h6{
+	font-size: 14px;
+	text-align: center;
+	font-weight: 500;
+}
+
 .player-progress{
 	background-color: #fff;
 	border-radius: 5px;
@@ -409,4 +415,60 @@ h3{
 	font-size: 33px;
 	position: relative;
 	top: 3px;
+}
+
+/*VOLUME STYLE*/
+
+
+.volume-wrapper {
+	position: relative;
+	width: 200px;
+	height: 5px;
+	display: flex;
+	align-items: center;  /* Центрирование по вертикали */
+	justify-content: center;  /* Центрирование по горизонтали */
+	margin: 0 auto;  /* Центрирование всего контейнера на странице */
+}
+
+.volume-bar {
+	position: relative;
+	background-color: #e0e0e0;
+	border-radius: 5px;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+}
+
+.volume-progress {
+	position: absolute;
+	left: 0;
+	background-color: #696969;
+	height: 100%;
+	width: 50%; /* Прогресс обновляется мгновенно */
+}
+
+#volume-control {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background: transparent;
+	cursor: pointer;
+	appearance: none;
+}
+
+#volume-control::-webkit-slider-thumb {
+	appearance: none;
+	width: 10px;
+	height: 10px;
+	background-color: #3f3f3f;
+	border-radius: 50%;
+	cursor: pointer;
+}
+
+#volume-control::-moz-range-thumb {
+	width: 11px;
+	height: 16px;
+	background-color: #007bff;
+	border-radius: 50%;
+	cursor: pointer;
 }

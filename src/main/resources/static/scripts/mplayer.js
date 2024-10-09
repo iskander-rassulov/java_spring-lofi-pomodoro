@@ -143,6 +143,26 @@ function changePlaylist(playlist) {
     playMusic(); // Начинаем воспроизведение автоматически
 }
 
+//VOLUME
+
+const volumeControl = document.getElementById('volume-control');
+const volumeProgress = document.querySelector('.volume-progress');
+
+// Устанавливаем начальное значение прогресса
+volumeProgress.style.width = `${volumeControl.value * 100}%`;
+
+// Обновляем прогресс при изменении громкости
+volumeControl.addEventListener('input', function () {
+    const volume = volumeControl.value;
+    music.volume = volume;  // Устанавливаем громкость
+    volumeProgress.style.width = `${volume * 100}%`;  // Обновляем ширину прогресса
+});
+
+
+
+//VOLUME END
+
+
 // Обработчики для кнопок смены плейлистов
 document.getElementById('buttonDefault')?.addEventListener('click', () => {
     console.log('Кнопка Default нажата.');
