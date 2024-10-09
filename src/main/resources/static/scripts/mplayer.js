@@ -157,11 +157,7 @@ volumeControl.addEventListener('input', function () {
     music.volume = volume;  // Устанавливаем громкость
     volumeProgress.style.width = `${volume * 100}%`;  // Обновляем ширину прогресса
 });
-
-
-
 //VOLUME END
-
 
 // Обработчики для кнопок смены плейлистов
 document.getElementById('buttonDefault')?.addEventListener('click', () => {
@@ -208,3 +204,5 @@ document.getElementById('buttonMedieval').addEventListener('click', function() {
 });
 
 loadMusic(defaultPlaylist[0]);
+
+

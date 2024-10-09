@@ -162,3 +162,46 @@ document.getElementById('buttonMedieval').addEventListener('click', function() {
     backgroundVideo.load(); // Перезагружаем видео
     backgroundVideo.play(); // Проигрываем новое видео
 });
+---------------------------------------------------------------------------------------
+
+
+// Инициализация времени для Pomodoro, Short Break и Long Break
+let pomodoroTime = 25 * 60;  // 25 минут
+let shortBreakTime = 5 * 60;  // 5 минут
+let longBreakTime = 15 * 60;  // 15 минут
+
+let currentModeTime = pomodoroTime;  // Начальное значение для Pomodoro
+let currentMode = 'pomodoro';  // Текущий режим - Pomodoro
+
+// Обновляем отображение времени в формате MM:SS
+function updateCurrentTimeDisplay() {
+    const minutes = Math.floor(currentModeTime / 60);
+    const seconds = currentModeTime % 60;
+    document.getElementById('currentTimeDisplay').textContent = `${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
+}
+
+// Увеличение времени на 5 минут
+document.getElementById('increaseTime').addEventListener('click', function () {
+    currentModeTime += 5 * 60;  // Добавляем 5 минут
+    updateCurrentTimeDisplay();  // Обновляем отображение
+    resetMainTimer(currentModeTime);  // Обновляем основной таймер
+});
+
+// Уменьшение времени на 5 минут (но не меньше 5 минут)
+document.getElementById('decreaseTime').addEventListener('click', function () {
+    if (currentModeTime > 5 * 60) {
+        currentModeTime -= 5 * 60;  // Уменьшаем на 5 минут
+        updateCurrentTimeDisplay();  // Обновляем отображение
+        resetMainTimer(currentModeTime);  // Обновляем основной таймер
+    }
+});
+
+// Функция сброса основного таймера
+function resetMainTimer(seconds) {
+    console.log(`Сбрасываем таймер на ${seconds} секунд`);
+    // Тут должен быть вызов метода для сброса основного таймера
+    // Например: mainTimer.reset(seconds);
+}
+
+// Изначальное отображение времени
+updateCurrentTimeDisplay();

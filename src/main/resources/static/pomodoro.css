@@ -472,3 +472,36 @@ h6{
 	border-radius: 50%;
 	cursor: pointer;
 }
+
+/*MODIFY TIME STYLE*/
+
+#currentTimeDisplay{
+	font-family: 'Comfortaa', sans-serif;
+	color: white;
+}
+
+#decreaseTime, #increaseTime {
+	font-family: 'Comfortaa', sans-serif;
+	font-size: 24px;
+	height: 40px;
+	width: 40px;
+	background: linear-gradient(135deg, #8c8c8c, #505050b3); /* Градиентный фон */
+	border: none; /* Убираем рамку */
+	color: #ffffff;
+	border: 2px solid white;
+	border-radius: 10px; /* Слегка закругленные углы */
+
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	padding: 0;
+	margin: 0;
+
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+	transition: background 0.3s ease, transform 0.3s ease;
+}
+#decreaseTime:hover, #increaseTime:hover {
+	background: linear-gradient(135deg, #444444, #2d2d2d); /* Изменение цвета при наведении */
+	transform: scale(1.1);
+}
