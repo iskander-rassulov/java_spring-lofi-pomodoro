@@ -31,8 +31,12 @@ function playMusic() {
     isPlaying = true;
     playBtn.classList.replace('fa-play', 'fa-pause');
     playBtn.setAttribute('title', 'Pause');
-    music.play();
+    music.play().catch(error => {
+        console.error("Ошибка при воспроизведении музыки:", error);
+    });
 }
+
+window.playMusic = playMusic;
 
 function pauseMusic() {
     isPlaying = false;
@@ -42,11 +46,15 @@ function pauseMusic() {
 }
 
 function loadMusic(song) {
-    music.src = song.path;
-    title.textContent = song.displayName;
-    artist.textContent = song.artist;
-    image.src = song.cover;
-    background.src = song.cover;
+    if (music && song.path) {
+        music.src = song.path;
+    } else {
+        console.error('Аудиофайл не найден.');
+    }
+    if (title) title.textContent = song.displayName || 'Unknown Title';
+    if (artist) artist.textContent = song.artist || 'Unknown Artist';
+    if (image) image.src = song.cover || '';
+    if (background) background.src = song.cover || '';
 }
 
 function changeMusic(direction) {
@@ -58,11 +66,11 @@ function changeMusic(direction) {
 function updateProgressBar() {
     const { duration, currentTime } = music;
     const progressPercent = (currentTime / duration) * 100;
-    progress.style.width = `${progressPercent}%`;
+    if (progress) progress.style.width = `${progressPercent}%`;
 
     const formatTime = (time) => String(Math.floor(time)).padStart(2, '0');
-    durationEl.textContent = `${formatTime(duration / 60)}:${formatTime(duration % 60)}`;
-    currentTimeEl.textContent = `${formatTime(currentTime / 60)}:${formatTime(currentTime % 60)}`;
+    if (durationEl) durationEl.textContent = `${formatTime(duration / 60)}:${formatTime(duration % 60)}`;
+    if (currentTimeEl) currentTimeEl.textContent = `${formatTime(currentTime / 60)}:${formatTime(currentTime % 60)}`;
 }
 
 function setProgressBar(e) {
@@ -72,12 +80,12 @@ function setProgressBar(e) {
 }
 
 // Обработчики для кнопок
-playBtn.addEventListener('click', togglePlay);
-prevBtn.addEventListener('click', () => changeMusic(-1));
-nextBtn.addEventListener('click', () => changeMusic(1));
-music.addEventListener('ended', () => changeMusic(1));
-music.addEventListener('timeupdate', updateProgressBar);
-playerProgress.addEventListener('click', setProgressBar);
+if (playBtn) playBtn.addEventListener('click', togglePlay);
+if (prevBtn) prevBtn.addEventListener('click', () => changeMusic(-1));
+if (nextBtn) nextBtn.addEventListener('click', () => changeMusic(1));
+if (music) music.addEventListener('ended', () => changeMusic(1));
+if (music) music.addEventListener('timeupdate', updateProgressBar);
+if (playerProgress) playerProgress.addEventListener('click', setProgressBar);
 
 // Плейлисты для кнопок
 const defaultPlaylist = [
@@ -125,41 +133,34 @@ const medievalPlaylist = [
     }
 ];
 
-// Функция для смены фона и плейлиста
-function changePlaylistAndBackground(playlist, videoSrc) {
-    console.log('Смена плейлиста и фона...');
-
+// Функция для смены плейлиста
+function changePlaylist(playlist) {
+    console.log('Смена плейлиста...');
+    pauseMusic();
     currentPlaylist = playlist; // Обновляем текущий плейлист
     musicIndex = 0; // Сбрасываем индекс на начало
-    loadMusic(currentPlaylist[musicIndex]);
-    playMusic();
-
-    // Меняем фоновое видео
-    const backgroundVideo = document.getElementById('backgroundVideo');
-    const source = backgroundVideo.querySelector('source');
-    source.setAttribute('src', videoSrc); // Меняем источник видео
-    backgroundVideo.load(); // Перезагружаем видео
-    backgroundVideo.play(); // Проигрываем новое видео
+    loadMusic(currentPlaylist[musicIndex]); // Загружаем первую песню
+    playMusic(); // Начинаем воспроизведение автоматически
 }
 
-
-// Обработчики для кнопок
-document.getElementById('buttonDefault').addEventListener('click', () => {
+// Обработчики для кнопок смены плейлистов
+document.getElementById('buttonDefault')?.addEventListener('click', () => {
     console.log('Кнопка Default нажата.');
-    changePlaylistAndBackground(defaultPlaylist, 'images/defaultwallp.jpg');
+    changePlaylist(defaultPlaylist);
 });
 
-document.getElementById('buttonHalloween').addEventListener('click', () => {
+document.getElementById('buttonHalloween')?.addEventListener('click', () => {
     console.log('Кнопка Halloween нажата.');
-    changePlaylistAndBackground(halloweenPlaylist, 'images/halloweenwallp.jpg');
+    changePlaylist(halloweenPlaylist);
 });
 
-document.getElementById('buttonMedieval').addEventListener('click', function (){
+document.getElementById('buttonMedieval')?.addEventListener('click', () => {
     console.log('Кнопка Medieval нажата.');
-    changePlaylistAndBackground(medievalPlaylist);
+    changePlaylist(medievalPlaylist);
 });
 
 document.getElementById('buttonDefault').addEventListener('click', function() {
+    pauseMusic();
     const backgroundVideo = document.getElementById('backgroundVideo');
     const source = backgroundVideo.querySelector('source');
     source.setAttribute('src', 'videos/defaultvid.mp4'); // Меняем источник видео
@@ -169,6 +170,7 @@ document.getElementById('buttonDefault').addEventListener('click', function() {
 
 
 document.getElementById('buttonHalloween').addEventListener('click', function() {
+    pauseMusic();
     const backgroundVideo = document.getElementById('backgroundVideo');
     const source = backgroundVideo.querySelector('source');
     source.setAttribute('src', 'videos/halloweenvid.mp4'); // Меняем источник видео
@@ -177,12 +179,12 @@ document.getElementById('buttonHalloween').addEventListener('click', function() 
 });
 
 document.getElementById('buttonMedieval').addEventListener('click', function() {
+    pauseMusic();
     const backgroundVideo = document.getElementById('backgroundVideo');
     const source = backgroundVideo.querySelector('source');
     source.setAttribute('src', 'videos/medievalvid.mp4'); // Меняем источник видео
     backgroundVideo.load(); // Перезагружаем видео
     backgroundVideo.play(); // Проигрываем новое видео
 });
-
 
 loadMusic(defaultPlaylist[0]);

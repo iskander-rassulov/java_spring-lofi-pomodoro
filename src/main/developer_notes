@@ -136,3 +136,29 @@ border: 1px solid #023047;
         }
     });
 };
+
+--------------------------------------------------------------------------------------
+document.getElementById('buttonDefault').addEventListener('click', function() {
+    const backgroundVideo = document.getElementById('backgroundVideo');
+    const source = backgroundVideo.querySelector('source');
+    source.setAttribute('src', 'videos/defaultvid.mp4'); // Меняем источник видео
+    backgroundVideo.load(); // Перезагружаем видео
+    backgroundVideo.play(); // Проигрываем новое видео
+});
+
+
+document.getElementById('buttonHalloween').addEventListener('click', function() {
+    const backgroundVideo = document.getElementById('backgroundVideo');
+    const source = backgroundVideo.querySelector('source');
+    source.setAttribute('src', 'videos/halloweenvid.mp4'); // Меняем источник видео
+    backgroundVideo.load(); // Перезагружаем видео
+    backgroundVideo.play(); // Проигрываем новое видео
+});
+
+document.getElementById('buttonMedieval').addEventListener('click', function() {
+    const backgroundVideo = document.getElementById('backgroundVideo');
+    const source = backgroundVideo.querySelector('source');
+    source.setAttribute('src', 'videos/medievalvid.mp4'); // Меняем источник видео
+    backgroundVideo.load(); // Перезагружаем видео
+    backgroundVideo.play(); // Проигрываем новое видео
+});

@@ -144,10 +144,17 @@ window.onload = function () {
 
     // Обработчики для кнопок
     document.getElementById('btn_start').addEventListener('click', function () {
-        document.getElementById('btn_start').style.display = 'none';
         document.getElementById('btn_pause').style.display = 'inline';
+        document.getElementById('btn_start').style.display = 'none';
         timer.start();
+
+        if (typeof window.playMusic === 'function') {
+            window.playMusic();  // Вызов глобальной функции playMusic из mplayer.js
+        } else {
+            console.error('Глобальная функция playMusic не найдена');
+        }
     });
+
 
     document.getElementById('btn_pause').addEventListener('click', function () {
         document.getElementById('btn_pause').style.display = 'none';
@@ -197,15 +204,3 @@ window.onload = function () {
     });
 };
 
-
-document.getElementById('btn_start').addEventListener('click', function () {
-    document.getElementById('btn_start').style.display = 'none';  // Скрываем кнопку START
-    document.getElementById('btn_pause').style.display = 'inline';  // Показываем кнопку PAUSE
-    timer.start();  // Запускаем таймер
-});
-
-document.getElementById('btn_pause').addEventListener('click', function () {
-    document.getElementById('btn_pause').style.display = 'none';  // Скрываем кнопку PAUSE
-    document.getElementById('btn_start').style.display = 'inline';  // Показываем кнопку START
-    timer.pause();  // Приостанавливаем таймер
-});
