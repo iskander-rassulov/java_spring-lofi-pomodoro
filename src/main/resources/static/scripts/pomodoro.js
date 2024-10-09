@@ -196,9 +196,9 @@ window.onload = function() {
     // Уменьшение времени
     document.getElementById('decreaseTime').addEventListener('click', function () {
         if (timer.isRunning) return; // Не изменяем время, если таймер работает
-        if (currentModeTime > 1 * 60) {
-            currentModeTime -= 1 * 60;
-            timer.addTime(-1 * 60); // Уменьшаем время на таймере
+        if (currentModeTime > 5 * 60) {
+            currentModeTime -= 5 * 60;
+            timer.addTime(-5 * 60); // Уменьшаем время на таймере
             updateCurrentTimeDisplay();
             setTimeOnAllDisplays(Math.floor(timer.remaining / 60), timer.remaining % 60);
         }

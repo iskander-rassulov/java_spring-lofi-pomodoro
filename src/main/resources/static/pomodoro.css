@@ -83,6 +83,7 @@ button.btn_default {
 	color: #ffffff;
 	border-radius: 10px;
 	text-shadow: 8px 8px 16px rgba(0, 0, 0, 1);
+	transition: transform 0.3s ease; /* Плавная анимация при увеличении */
 }
 
 #btn_shortbreak{
@@ -94,6 +95,7 @@ button.btn_default {
 	color: #ffffff;
 	border-radius: 10px;
 	text-shadow: 8px 8px 16px rgba(0, 0, 0, 1);
+	transition: transform 0.3s ease; /* Плавная анимация при увеличении */
 }
 
 #btn_longbreak{
@@ -104,6 +106,13 @@ button.btn_default {
 	color: #ffffff;
 	border-radius: 10px;
 	text-shadow: 8px 8px 16px rgba(0, 0, 0, 1);
+	transition: transform 0.3s ease; /* Плавная анимация при увеличении */
+}
+
+#btn_pomodoro:hover,
+#btn_longbreak:hover,
+#btn_shortbreak:hover {
+	transform: scale(1.1); /* Увеличение кнопки на 10% */
 }
 
 #btn_custom{
@@ -120,8 +129,9 @@ button.btn_default {
 	color: #ffffff;
 	border-radius: 10px;
 	text-shadow: 8px 8px 16px rgba(0, 0, 0, 1);
-
+	transition: transform 0.3s ease; /* Плавная анимация при увеличении */
 }
+
 #btn_pause {
 	font-family: 'Comfortaa', sans-serif;
 	margin-top: 150px;
@@ -131,12 +141,14 @@ button.btn_default {
 	color: #ffffff;
 	border-radius: 10px;
 	text-shadow: 8px 8px 16px rgba(0, 0, 0, 1);
+	transition: transform 0.3s ease; /* Плавная анимация при увеличении */
 }
-#btn_reset {
-    background-color: #540b0e;
-	border: 1px solid white;
-	color: white;
+
+#btn_start:hover,
+#btn_pause:hover {
+	transform: scale(1.1); /* Увеличение кнопки на 10% */
 }
+
 #ipt_custom {
 	padding: 8px 12px;
     width: 75px;
@@ -284,6 +296,8 @@ div.footerbox ol {
 	font-size: 1.5em;
 	font-weight: bold;
 	text-shadow: 8px 8px 16px rgba(0, 0, 0, 1); /* Добавляем тень для текста */
+	user-select: none;
+	cursor: pointer; /* Меняем курсор на указатель при наведении */
 }
 
 /* Увеличение кнопок при наведении */
