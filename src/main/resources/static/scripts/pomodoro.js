@@ -149,6 +149,7 @@ window.onload = function() {
         currentModeTime = newModeTime; // Обновляем текущее время для нового режима
         timer.remaining = newModeTime; // Обновляем оставшееся время
 
+
         // Прямое обновление текста таймера
         const timerElement = document.getElementById('timer');
         const minutes = Math.floor(newModeTime / 60);
@@ -162,10 +163,13 @@ window.onload = function() {
         // Обновляем currentMode в зависимости от кнопки
         if (buttonId === 'btn_pomodoro') {
             currentMode = 'pomodoro';
+            updateCurrentTimeDisplay();
         } else if (buttonId === 'btn_shortbreak') {
             currentMode = 'shortbreak';
+            updateCurrentTimeDisplay();
         } else if (buttonId === 'btn_longbreak') {
             currentMode = 'longbreak';
+            updateCurrentTimeDisplay();
         }
 
         console.log("Current Mode Time:", currentModeTime); // Для отладки
