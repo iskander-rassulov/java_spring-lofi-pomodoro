@@ -1,46 +1,51 @@
 package com.iskander.lofipomodoro;
 
-import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
+import com.fasterxml.jackson.databind.JsonNode;
 
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
 
 @Service
 public class TodoistService {
 
-    private final WebClient webClient;
+    @Value("${todoist.client_id}")
+    private String clientId;
 
-    public TodoistService(WebClient.Builder webClientBuilder) {
-        this.webClient = webClientBuilder.baseUrl("https://api.todoist.com/rest/v1").build();
-    }
+    @Value("${todoist.client_secret}")
+    private String clientSecret;
 
-    // Теперь токен передаётся в качестве параметра
     public List<Map<String, Object>> getTasks(String accessToken) {
+        WebClient webClient = WebClient.create();
         return webClient.get()
-                .uri("https://api.todoist.com/rest/v2/tasks")
+                .uri("https://api.todoist.com/rest/v1/tasks")
                 .header("Authorization", "Bearer " + accessToken)
                 .retrieve()
-                .bodyToMono(new ParameterizedTypeReference<List<Map<String, Object>>>() {})
+                .bodyToFlux(new ParameterizedTypeReference<Map<String, Object>>() {})
+                .collectList()
                 .block();
     }
 
+
     public void addTask(String content, String accessToken) {
+        WebClient webClient = WebClient.create();
         webClient.post()
-                .uri("https://api.todoist.com/rest/v2/tasks")
+                .uri("https://api.todoist.com/rest/v1/tasks")
                 .header("Authorization", "Bearer " + accessToken)
-                .bodyValue(Map.of("content", content))
+                .body(BodyInserters.fromValue(Map.of("content", content)))
                 .retrieve()
-                .bodyToMono(Void.class)
+                .bodyToMono(JsonNode.class)
                 .block();
     }
 
     public void deleteTask(Long taskId, String accessToken) {
+        WebClient webClient = WebClient.create();
         webClient.delete()
-                .uri("https://api.todoist.com/rest/v2/tasks/{id}", taskId)
+                .uri("https://api.todoist.com/rest/v1/tasks/" + taskId)
                 .header("Authorization", "Bearer " + accessToken)
                 .retrieve()
                 .bodyToMono(Void.class)
@@ -48,16 +53,12 @@ public class TodoistService {
     }
 
     public void completeTask(Long taskId, String accessToken) {
+        WebClient webClient = WebClient.create();
         webClient.post()
-                .uri("https://api.todoist.com/rest/v2/tasks/{id}/close", taskId)
+                .uri("https://api.todoist.com/rest/v1/tasks/" + taskId + "/close")
                 .header("Authorization", "Bearer " + accessToken)
                 .retrieve()
                 .bodyToMono(Void.class)
                 .block();
     }
 }
-
-
-
-
-
