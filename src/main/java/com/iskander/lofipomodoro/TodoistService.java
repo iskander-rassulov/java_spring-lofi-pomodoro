@@ -13,50 +13,50 @@ import java.util.logging.Logger;
 public class TodoistService {
 
     private final WebClient webClient;
-    private final String API_TOKEN = "3ac25c8a4caeef2577d77673e9b624f64610eeea"; // Добавлен токен
 
     public TodoistService(WebClient.Builder webClientBuilder) {
         this.webClient = webClientBuilder.baseUrl("https://api.todoist.com/rest/v1").build();
     }
 
-    public List<Map<String, Object>> getTasks() {
+    // Теперь токен передаётся в качестве параметра
+    public List<Map<String, Object>> getTasks(String accessToken) {
         return webClient.get()
-                .uri("https://api.todoist.com/rest/v2/tasks")  // Обновлённый URL
-                .header("Authorization", "Bearer " + API_TOKEN)
+                .uri("https://api.todoist.com/rest/v2/tasks")
+                .header("Authorization", "Bearer " + accessToken)
                 .retrieve()
                 .bodyToMono(new ParameterizedTypeReference<List<Map<String, Object>>>() {})
                 .block();
     }
 
-    public void addTask(String content) {
+    public void addTask(String content, String accessToken) {
         webClient.post()
-                .uri("https://api.todoist.com/rest/v2/tasks")  // Обновлённый URL
-                .header("Authorization", "Bearer " + API_TOKEN)
+                .uri("https://api.todoist.com/rest/v2/tasks")
+                .header("Authorization", "Bearer " + accessToken)
                 .bodyValue(Map.of("content", content))
                 .retrieve()
                 .bodyToMono(Void.class)
                 .block();
     }
 
-    public void deleteTask(Long taskId) {
+    public void deleteTask(Long taskId, String accessToken) {
         webClient.delete()
-                .uri("https://api.todoist.com/rest/v2/tasks/{id}", taskId)  // Обновлённый URL
-                .header("Authorization", "Bearer " + API_TOKEN)
+                .uri("https://api.todoist.com/rest/v2/tasks/{id}", taskId)
+                .header("Authorization", "Bearer " + accessToken)
                 .retrieve()
                 .bodyToMono(Void.class)
                 .block();
     }
 
-    public void completeTask(Long taskId) {
+    public void completeTask(Long taskId, String accessToken) {
         webClient.post()
-                .uri("https://api.todoist.com/rest/v2/tasks/{id}/close", taskId)  // Обновлённый URL
-                .header("Authorization", "Bearer " + API_TOKEN)
+                .uri("https://api.todoist.com/rest/v2/tasks/{id}/close", taskId)
+                .header("Authorization", "Bearer " + accessToken)
                 .retrieve()
                 .bodyToMono(Void.class)
                 .block();
     }
-
 }
+
 
 
 

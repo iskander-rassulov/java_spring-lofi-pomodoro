@@ -2,6 +2,7 @@ package com.iskander.lofipomodoro;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.http.MediaType;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,7 +26,7 @@ public class LoginController {
     }
 
     @GetMapping("/callback")
-    public String callback(@RequestParam String code, Model model) {
+    public String callback(@RequestParam String code, HttpSession session) {
         String clientId = "26a5d4bcf1794b20bc23d2027d1f92e5";
         String clientSecret = "788d1fb22f2247f5a56c541d14068996";
         String redirectUri = "http://localhost:8080/callback";
@@ -44,8 +45,20 @@ public class LoginController {
                 .get("access_token")
                 .asText();
 
-        model.addAttribute("token", token);
-        return "redirect:/home";  // Перенаправление после успешной авторизации
+        // Сохраняем токен в сессии
+        if (token != null && !token.isEmpty()) {
+            session.setAttribute("accessToken", token);
+
+            // Перенаправляем на /todoist/tasks
+            return "redirect:/todoist/tasks";
+        } else {
+            // Если токен не получен, перенаправляем на страницу с ошибкой
+            return "redirect:/error";
+        }
     }
+
+
+
+
 
 }

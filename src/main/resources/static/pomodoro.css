@@ -519,3 +519,25 @@ h6{
 	background: linear-gradient(135deg, #444444, #2d2d2d); /* Изменение цвета при наведении */
 	transform: scale(1.1);
 }
+
+/*LOGIN WITH TODOIST BUTTON*/
+
+.btn_todoist {
+	background-color: #fc5c65;
+	color: white;
+	border: none;
+	padding: 10px 20px;
+	font-size: 16px;
+	cursor: pointer;
+	position: fixed;  /* Фиксированное положение на экране */
+	left: 20px;       /* Позиция слева */
+	top: 50px;        /* Отступ сверху */
+	border-radius: 8px; /* Закругленные края кнопки */
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Легкая тень */
+	transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.btn_todoist:hover {
+	background-color: #e74c3c; /* Изменение цвета при наведении */
+	transform: scale(1.05);    /* Увеличение кнопки при наведении */
+}
