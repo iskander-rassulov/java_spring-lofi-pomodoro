@@ -1,31 +1,63 @@
 package com.iskander.lofipomodoro;
 
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.slf4j.LoggerFactory;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
+
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Logger;
 
 @Service
 public class TodoistService {
-    private final String API_URL = "https://api.todoist.com/rest/v1/tasks";
-    private final String TOKEN = "your_todoist_token";
 
-    private final RestTemplate restTemplate;
+    private final WebClient webClient;
+    private final String API_TOKEN = "3ac25c8a4caeef2577d77673e9b624f64610eeea"; // Добавлен токен
 
-    public TodoistService(RestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
+    public TodoistService(WebClient.Builder webClientBuilder) {
+        this.webClient = webClientBuilder.baseUrl("https://api.todoist.com/rest/v1").build();
     }
 
-    public String getTasks() {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setBearerAuth(TOKEN);
-        HttpEntity<String> entity = new HttpEntity<>(headers);
-
-        ResponseEntity<String> response = restTemplate.exchange(API_URL, HttpMethod.GET, entity, String.class);
-        return response.getBody();
+    public List<Map<String, Object>> getTasks() {
+        return webClient.get()
+                .uri("https://api.todoist.com/rest/v2/tasks")  // Обновлённый URL
+                .header("Authorization", "Bearer " + API_TOKEN)
+                .retrieve()
+                .bodyToMono(new ParameterizedTypeReference<List<Map<String, Object>>>() {})
+                .block();
     }
 
-    // Другие методы для взаимодействия с API (например, добавление задачи)
+    public void addTask(String content) {
+        webClient.post()
+                .uri("https://api.todoist.com/rest/v2/tasks")  // Обновлённый URL
+                .header("Authorization", "Bearer " + API_TOKEN)
+                .bodyValue(Map.of("content", content))
+                .retrieve()
+                .bodyToMono(Void.class)
+                .block();
+    }
+
+    public void deleteTask(Long taskId) {
+        webClient.delete()
+                .uri("https://api.todoist.com/rest/v2/tasks/{id}", taskId)  // Обновлённый URL
+                .header("Authorization", "Bearer " + API_TOKEN)
+                .retrieve()
+                .bodyToMono(Void.class)
+                .block();
+    }
+
+    public void completeTask(Long taskId) {
+        webClient.post()
+                .uri("https://api.todoist.com/rest/v2/tasks/{id}/close", taskId)  // Обновлённый URL
+                .header("Authorization", "Bearer " + API_TOKEN)
+                .retrieve()
+                .bodyToMono(Void.class)
+                .block();
+    }
+
 }
+
+
+
+
