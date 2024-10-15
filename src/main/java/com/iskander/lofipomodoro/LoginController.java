@@ -28,7 +28,7 @@ public class LoginController {
     @GetMapping("/callback")
     public String callback(@RequestParam String code, HttpSession session) {
         String clientId = "26a5d4bcf1794b20bc23d2027d1f92e5";
-        String clientSecret = "788d1fb22f2247f5a56c541d14068996";
+        String clientSecret = "";
         String redirectUri = "http://localhost:8080/callback";
 
         WebClient webClient = WebClient.create();
