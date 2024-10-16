@@ -1,64 +1,33 @@
 package com.iskander.lofipomodoro;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
-import com.fasterxml.jackson.databind.JsonNode;
-
-import java.util.List;
-import java.util.Map;
 
 @Service
 public class TodoistService {
 
-    @Value("${todoist.client_id}")
+    @Value("${TODOIST_CLIENT_ID}")
     private String clientId;
 
-    @Value("${todoist.client_secret}")
+    @Value("${TODOIST_CLIENT_SECRET}")
     private String clientSecret;
 
-    public List<Map<String, Object>> getTasks(String accessToken) {
-        WebClient webClient = WebClient.create();
-        return webClient.get()
-                .uri("https://api.todoist.com/rest/v1/tasks")
-                .header("Authorization", "Bearer " + accessToken)
+    private final WebClient webClient;
+
+    public TodoistService(WebClient.Builder webClientBuilder) {
+        this.webClient = webClientBuilder.baseUrl("https://todoist.com").build();
+    }
+
+    public String getAccessToken(String code) {
+        return this.webClient.post()
+                .uri("/oauth/access_token")
+                .bodyValue("client_id=" + clientId + "&client_secret=" + clientSecret + "&code=" + code)
                 .retrieve()
-                .bodyToFlux(new ParameterizedTypeReference<Map<String, Object>>() {})
-                .collectList()
+                .bodyToMono(String.class) // Здесь следует парсить ответ JSON
                 .block();
     }
 
-
-    public void addTask(String content, String accessToken) {
-        WebClient webClient = WebClient.create();
-        webClient.post()
-                .uri("https://api.todoist.com/rest/v1/tasks")
-                .header("Authorization", "Bearer " + accessToken)
-                .body(BodyInserters.fromValue(Map.of("content", content)))
-                .retrieve()
-                .bodyToMono(JsonNode.class)
-                .block();
-    }
-
-    public void deleteTask(Long taskId, String accessToken) {
-        WebClient webClient = WebClient.create();
-        webClient.delete()
-                .uri("https://api.todoist.com/rest/v1/tasks/" + taskId)
-                .header("Authorization", "Bearer " + accessToken)
-                .retrieve()
-                .bodyToMono(Void.class)
-                .block();
-    }
-
-    public void completeTask(Long taskId, String accessToken) {
-        WebClient webClient = WebClient.create();
-        webClient.post()
-                .uri("https://api.todoist.com/rest/v1/tasks/" + taskId + "/close")
-                .header("Authorization", "Bearer " + accessToken)
-                .retrieve()
-                .bodyToMono(Void.class)
-                .block();
-    }
+    // Добавьте метод для получения профиля пользователя
 }
+
