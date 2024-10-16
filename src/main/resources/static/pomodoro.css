@@ -530,8 +530,8 @@ h6{
 	font-size: 16px;
 	cursor: pointer;
 	position: fixed;  /* Фиксированное положение на экране */
-	left: 20px;       /* Позиция слева */
-	top: 50px;        /* Отступ сверху */
+	left: 100px;       /* Позиция слева */
+	top: 10px;        /* Отступ сверху */
 	border-radius: 8px; /* Закругленные края кнопки */
 	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Легкая тень */
 	transition: background 0.3s ease, transform 0.3s ease;
@@ -540,4 +540,23 @@ h6{
 .btn_todoist:hover {
 	background-color: #e74c3c; /* Изменение цвета при наведении */
 	transform: scale(1.05);    /* Увеличение кнопки при наведении */
+}
+
+/*USER TODOIST*/
+
+#user-info {
+	display: flex;
+	align-items: center;
+	margin-top: 200px;
+}
+
+#user-avatar {
+	margin-right: 10px;
+	border: 2px solid #ccc;
+}
+
+#user-name {
+	font-family: 'Comfortaa', sans-serif;
+	font-size: 1.5em;
+	color: #ffffff;
 }

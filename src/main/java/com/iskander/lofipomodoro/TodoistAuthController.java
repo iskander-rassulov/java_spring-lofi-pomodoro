@@ -1,5 +1,6 @@
 package com.iskander.lofipomodoro;
 
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.util.LinkedMultiValueMap;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.net.URI;
 import java.util.Map;
@@ -35,7 +37,7 @@ public class TodoistAuthController {
     }
 
     @GetMapping("/callback")
-    public ResponseEntity<String> todoistCallback(@RequestParam("code") String code) {
+    public ModelAndView todoistCallback(@RequestParam("code") String code) {
         RestTemplate restTemplate = new RestTemplate();
 
         // Формируем запрос на получение токена
@@ -51,19 +53,33 @@ public class TodoistAuthController {
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(body, headers);
 
         // Отправляем POST запрос
-        ResponseEntity<Map> response = restTemplate.postForEntity(url, request, Map.class);
+        ResponseEntity<Map> responseEntity = restTemplate.postForEntity(url, request, Map.class);
 
-        if (response.getStatusCode() == HttpStatus.OK) {
+        if (responseEntity.getStatusCode() == HttpStatus.OK) {
             // Извлекаем access_token из ответа
-            Map<String, String> responseBody = response.getBody();
+            Map<String, String> responseBody = responseEntity.getBody();
             String accessToken = responseBody.get("access_token");
 
-            // Выводим токен в лог или возвращаем как часть HTTP-ответа
+            // Выводим токен в лог или сохраняем его по необходимости
             System.out.println("Access Token: " + accessToken);
-            return ResponseEntity.ok("Access Token: " + accessToken);
+
+            // Перенаправляем пользователя на корневую страницу
+            return new ModelAndView("redirect:/");
         } else {
-            // Обрабатываем ошибки
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to retrieve access token");
+            // Обрабатываем ошибку
+            return new ModelAndView("error");
+        }
+    }
+
+    @GetMapping("/user-info")
+    public ResponseEntity<Map<String, String>> getUserInfo(HttpSession session) {
+        String name = (String) session.getAttribute("userName");
+        String avatar = (String) session.getAttribute("avatarUrl");
+
+        if (name != null && avatar != null) {
+            return ResponseEntity.ok(Map.of("name", name, "avatar", avatar));
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
 

@@ -215,3 +215,42 @@ else{
 -----------------------------------------------------------------------------------------------------------
 
 http://localhost:8080/todoist/tasks
+
+------------------------------------------------------------------------------------
+
+@GetMapping("/callback")
+    public ModelAndView todoistCallback(@RequestParam("code") String code) {
+        RestTemplate restTemplate = new RestTemplate();
+
+        // Формируем запрос на получение токена
+        String url = "https://todoist.com/oauth/access_token";
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
+        body.add("client_id", clientId);
+        body.add("client_secret", clientSecret);
+        body.add("code", code);
+        body.add("redirect_uri", redirectUri);
+
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(body, headers);
+
+        // Отправляем POST запрос
+        ResponseEntity<Map> responseEntity = restTemplate.postForEntity(url, request, Map.class);
+
+        if (responseEntity.getStatusCode() == HttpStatus.OK) {
+            // Извлекаем access_token из ответа
+            Map<String, String> responseBody = responseEntity.getBody();
+            String accessToken = responseBody.get("access_token");
+
+            // Выводим токен в лог или сохраняем его по необходимости
+            System.out.println("Access Token: " + accessToken);
+
+            // Перенаправляем пользователя на корневую страницу
+            return new ModelAndView("redirect:/");
+        } else {
+            // Обрабатываем ошибку
+            return new ModelAndView("error");
+        }
+    }
+
+    --------------------------------------------------------------------------------------------------------------
