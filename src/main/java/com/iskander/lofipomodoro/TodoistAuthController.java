@@ -19,6 +19,8 @@ import java.util.Map;
 @RequestMapping("/todoist")
 public class TodoistAuthController {
 
+    private String accessToken;  // Переменная для хранения access_token
+
     @Value("${TODOIST_CLIENT_ID}")
     private String clientId;
 
@@ -44,6 +46,7 @@ public class TodoistAuthController {
         String url = "https://todoist.com/oauth/access_token";
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("client_id", clientId);
         body.add("client_secret", clientSecret);
@@ -52,15 +55,15 @@ public class TodoistAuthController {
 
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(body, headers);
 
-        // Отправляем POST запрос
+        // Отправляем POST запрос для получения токена
         ResponseEntity<Map> responseEntity = restTemplate.postForEntity(url, request, Map.class);
 
         if (responseEntity.getStatusCode() == HttpStatus.OK) {
             // Извлекаем access_token из ответа
             Map<String, String> responseBody = responseEntity.getBody();
-            String accessToken = responseBody.get("access_token");
+            this.accessToken = responseBody.get("access_token");  // Сохраняем токен в переменной
 
-            // Выводим токен в лог или сохраняем его по необходимости
+            // Выводим токен в лог для проверки
             System.out.println("Access Token: " + accessToken);
 
             // Перенаправляем пользователя на корневую страницу
@@ -83,5 +86,9 @@ public class TodoistAuthController {
         }
     }
 
+    // Метод для получения access_token
+    public String getAccessToken() {
+        return this.accessToken;
+    }
 
 }
