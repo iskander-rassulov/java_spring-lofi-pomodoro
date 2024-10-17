@@ -1,94 +1,56 @@
 package com.iskander.lofipomodoro;
 
+import com.iskander.lofipomodoro.TodoistService;
 import jakarta.servlet.http.HttpSession;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.*;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.net.URI;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/todoist")
 public class TodoistAuthController {
 
-    private String accessToken;  // Переменная для хранения access_token
+    private final TodoistService todoistService;
 
-    @Value("${TODOIST_CLIENT_ID}")
-    private String clientId;
+    public TodoistAuthController(TodoistService todoistService) {
+        this.todoistService = todoistService;
+    }
 
-    @Value("${TODOIST_REDIRECT_URI}")
-    private String redirectUri;
-
-    @Value("${TODOIST_CLIENT_SECRET}")
-    private String clientSecret;  // Убедитесь, что эта переменная есть
-
-    @GetMapping("/login")
+    @GetMapping("/todoist/login")
     public ResponseEntity<Void> loginWithTodoist() {
-        String authorizationUrl = "https://todoist.com/oauth/authorize?client_id=" + clientId + "&scope=data:read&state=random_state_string&redirect_uri=" + redirectUri;
+        String authorizationUrl = todoistService.getAuthorizationUrl();
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(URI.create(authorizationUrl));
         return new ResponseEntity<>(headers, HttpStatus.FOUND);
     }
 
-    @GetMapping("/callback")
-    public ModelAndView todoistCallback(@RequestParam("code") String code) {
-        RestTemplate restTemplate = new RestTemplate();
+    @GetMapping("/todoist/callback")
+    public ModelAndView todoistCallback(String code, HttpSession session) {
+        try {
+            // Обмен кода на access_token
+            String accessToken = todoistService.exchangeCodeForAccessToken(code);
+            session.setAttribute("accessToken", accessToken);
 
-        // Формируем запрос на получение токена
-        String url = "https://todoist.com/oauth/access_token";
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+            // Получение информации о пользователе
+            Map<String, Object> userInfo = todoistService.getUserInfo(accessToken);
+            if (userInfo != null) {
+                String fullName = (String) userInfo.get("full_name");
+                String avatarBig = (String) userInfo.get("avatar_big");
 
-        MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
-        body.add("client_id", clientId);
-        body.add("client_secret", clientSecret);
-        body.add("code", code);
-        body.add("redirect_uri", redirectUri);
+                session.setAttribute("userName", fullName);
+                session.setAttribute("avatarUrl", avatarBig);
+            }
 
-        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(body, headers);
-
-        // Отправляем POST запрос для получения токена
-        ResponseEntity<Map> responseEntity = restTemplate.postForEntity(url, request, Map.class);
-
-        if (responseEntity.getStatusCode() == HttpStatus.OK) {
-            // Извлекаем access_token из ответа
-            Map<String, String> responseBody = responseEntity.getBody();
-            this.accessToken = responseBody.get("access_token");  // Сохраняем токен в переменной
-
-            // Выводим токен в лог для проверки
-            System.out.println("Access Token: " + accessToken);
-
-            // Перенаправляем пользователя на корневую страницу
+            // Перенаправление на главную страницу
             return new ModelAndView("redirect:/");
-        } else {
-            // Обрабатываем ошибку
+        } catch (Exception e) {
+            e.printStackTrace();
             return new ModelAndView("error");
         }
     }
-
-    @GetMapping("/user-info")
-    public ResponseEntity<Map<String, String>> getUserInfo(HttpSession session) {
-        String name = (String) session.getAttribute("userName");
-        String avatar = (String) session.getAttribute("avatarUrl");
-
-        if (name != null && avatar != null) {
-            return ResponseEntity.ok(Map.of("name", name, "avatar", avatar));
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-    }
-
-    // Метод для получения access_token
-    public String getAccessToken() {
-        return this.accessToken;
-    }
-
 }
